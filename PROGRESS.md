@@ -1,6 +1,8 @@
 # Anatomy Studio — saved progress
 
-Snapshot saved September 23, 2026.
+Updated September 23, 2026. The original ZIP preserves the earlier checkpoint; this working repository has since been published and improved.
+
+Live studio: https://rorrimaesu.github.io/Anatomy-Studio-Organs-Cavities-Membranes/
 
 ## Implemented
 
@@ -10,15 +12,17 @@ Snapshot saved September 23, 2026.
 - Section practice with multiple choice, typed labels, location questions, hints, and assisted-answer accounting.
 - Full exams, answer review, section scores, and retries of missed or assisted questions.
 - Browser-local learning history and preferences.
-- Six automated checks passed in the last test run, covering assets and targets, typed aliases, scoring, balanced exams, question banks, and unavailable storage.
-- Desktop browser checks covered section navigation, hidden labels, typed-answer grading, hints, and starting an exam.
+- Seven automated checks passed, covering assets and targets, typed aliases, scoring, balanced exams, question banks, unavailable storage, preserved drafts, and diagram context in results.
+- A complete 40-question browser exam reached the expected score and kept feedback hidden until submission. Retrying its 39 missed questions produced a 39-question practice session.
+- Phone checks at 390px covered all eight sections and 22 diagrams. Crowded organ and pleural markers were separated. Diagram zoom scrolls inside its panel without widening the page.
+- Results now include the original diagram and the correct structure marker. Typed answers survive zoom and hint requests.
+- Dorsal, ventral and abdominopelvic cavity targets bring the atlas to 92 labeling targets, plus 95 concept questions.
 
-## Remaining before publication
+## Publication
 
-- Finish browser testing of full-exam completion, missed-question retry, and small-screen layouts.
-- Complete a final visual check of diagram targets and label covers at different sizes.
-- Commit and push the project to https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes.
-- Enable GitHub Pages and verify the published site. The project has not yet been published.
+- The saved checkpoint was committed and pushed to https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes.
+- GitHub Pages is enabled for the main branch at the repository root; its initial deployment returned HTTP 200.
+- Subsequent improvements are published through the same branch. See the Git history for each version.
 
 ## Run the saved studio
 

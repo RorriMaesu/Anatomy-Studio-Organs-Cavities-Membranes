@@ -67,6 +67,14 @@ export const sources=[{title:'OpenStax Anatomy and Physiology 2e',url:'https://o
 
 // Separate numbered callouts from tiny structures while retaining exact anatomical endpoints.
 cavity.alwaysMask=true;
-[[82,8],[82,22],[38,25],[43,30],[83,40],[43,49],[83,58],[43,70],[43,84]].forEach((pin,i)=>cavity.targets[i].pin=pin);
+cavity.targets.push(
+ {...t('Dorsal body cavity',7.1,43,'The posterior compartment comprising the cranial and vertebral cavities; protects the brain and spinal cord.',['posterior body cavity','dorsal cavity']),pin:[3,55]},
+ {...t('Ventral body cavity',85,62,'The anterior compartment comprising the thoracic and abdominopelvic cavities. The diaphragm separates its two main divisions.',['anterior body cavity','ventral cavity']),pin:[95,52]},
+ {...t('Abdominopelvic cavity',73.7,70,'The continuous space formed by the abdominal and pelvic cavities, inferior to the diaphragm.',['abdominopelvic']),pin:[94,83]}
+);
+[[82,8],[82,22],[9,38],[43,30],[83,40],[43,49],[83,58],[43,70],[43,84]].forEach((pin,i)=>cavity.targets[i].pin=pin);
 serosa.alwaysMask=true;[[47,10],[47,30],[47,49]].forEach((pin,i)=>serosa.targets[i].pin=pin);
 for(const v of systemViews)v.targets.forEach((p,i)=>p.pin=[i%2?88:12,12+i*72/Math.max(1,v.targets.length-1)]);
+// Keep adjacent neck, upper-abdominal and pleural markers distinct on phones.
+[[1,[70,34]],[2,[28,40]],[6,[18,63]],[7,[20,71]],[9,[22,79]]].forEach(([i,pin])=>torso.targets[i].pin=pin);
+pleura.targets[2].pin=[92,63];
