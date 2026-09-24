@@ -150,3 +150,67 @@ refs[1].panels=[
  {name:'Posterior · limbs',box:[1130,850,1217,1215]}
 ];
 sources[0].text+=' Figure 27.4 supplies a detailed testis and epididymis view. Enlarged crops preserve the original anatomical artwork.';
+
+// Original printed leader paths, in source-image pixels, ordered label → anatomy.
+// These paths position buttons only; the renderer never draws a duplicate stroke.
+for(const v of systemViews.filter(v=>v.id!=='reproductive-male')){
+ const g=illustrations[v.id],system=systems.find(s=>s.id===(v.id.startsWith('reproductive')?'reproductive':v.id));
+ v.targets.forEach(p=>{
+  const index=system.organs.findIndex(o=>o[0]===p.name),geometry=g.targets[index];
+  const stroke=g.strokes[geometry.leaders[0]];
+  p.leader=[stroke.slice(0,2),stroke.slice(2)];
+ });
+}
+function printedLeaders(v,paths){paths.forEach((path,i)=>{v.targets[i].leader=path;});}
+// Blood-vessel callouts share a short stem before branching toward the limbs.
+systemViews.find(v=>v.id==='cardiovascular').targets[1].leader=[[.5,345.5],[25,346],[82,222]];
+printedLeaders(serosa,[
+ [[370,34],[330,34],[242,159]],
+ [[370,114],[341,114],[281,197]],
+ [[370,195],[341,195],[314,225]]
+]);
+serosa.focusBox=[0,0,372,405];
+printedLeaders(pleura,[
+ [[1397,452],[1742,452]],
+ [[1397,677],[1742,677]],
+ [[1770,807],[1770,750]]
+]);
+pleura.focusBox=[1438,273,470,542];
+printedLeaders(peritoneum,[
+ [[200,571],[225,571],[287,464]],
+ [[594,571],[568,571],[520,482]],
+ [[407,559],[407,493]]
+]);
+peritoneum.focusBox=[180,365,435,224];
+printedLeaders(meninges,[
+ [[780,159],[736,148]],
+ [[150,164],[225,190]],
+ [[94,276],[376,198]]
+]);
+meninges.focusBox=[150,65,630,225];
+printedLeaders(planes,[
+ [[172,40],[343,40]],[[1022,105],[813,105]],
+ [[1022,388],[911,490]],[[865,945],[694,1008]]
+]);
+printedLeaders(cavity,[
+ [[892,58],[745,58]],[[892,135],[751,135]],
+ [[397,201],[373,201],[294,272]],
+ [[496,227],[758,227]],
+ [[536,272],[821,315]],
+ [[511,293],[559,293],[760,330]],
+ [[532,371],[569,371],[755,357]],
+ [[564,479],[756,479]],[[520,575],[756,575]],
+ [[68,227],[84,227]],[[1026,406],[1006,406]],
+ [[894,491],[874,491]]
+]);
+// The two central chest callouts are close at the text edge. Put their
+// buttons farther along their existing strokes without adding any new line.
+cavity.targets[3].leader=[[640,227],[758,227]];
+cavity.targets[5].leader=[[635,307],[760,330]];
+// The section has no printed leader naming the entire testis: mark it directly.
+// Epididymis uses the original "body of epididymis" pointer.
+male.targets[1].leader=[[77,302],[253,352]];
+// Only the unlabeled online composite needs added connectors.
+torso.customLeaders=true;
+torso.targets[8].pin=[78,65];
+torso.targets[10].pin=[80,75];

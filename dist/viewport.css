@@ -1,4 +1,12 @@
 /* The desktop atlas is a fixed-height workspace. Cards are paged, not clipped. */
+/* Dense printed cavity callouts need the full figure width on compact desktops. */
+@media(min-width:1000px) and (max-width:1200px){
+ .workspace .diagram-card[data-view="cavities"]{grid-template-columns:1fr;grid-template-rows:auto auto minmax(0,1fr) auto auto}
+ .workspace .diagram-card[data-view="cavities"] .legend{grid-column:1;grid-row:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-left:0;border-top:1px solid #e2e7e8;padding:4px;gap:1px;justify-content:normal}
+ .workspace .diagram-card[data-view="cavities"] .legend button{font-size:10px;min-height:22px;padding:2px}
+ .workspace .diagram-card[data-view="cavities"] .figure-credit{grid-row:5}
+}
+.diagram-card[data-view="cavities"] .pin{width:22px;height:22px;min-width:22px;line-height:18px;font-size:10px}
 .card-tabs{display:flex;gap:5px;margin:0 0 16px;flex-wrap:wrap}
 .card-tabs button{padding:7px 11px;font-size:13px}
 .card-tabs button[aria-pressed=true]{background:var(--lime);color:#172119}

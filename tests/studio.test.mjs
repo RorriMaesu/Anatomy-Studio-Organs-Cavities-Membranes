@@ -3,8 +3,41 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import fs from 'node:fs';
 import {sections,sources} from '../dist/data.js';
+import {illustrations} from '../dist/system-geometry.js';
 const code=fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8').replace(/import \{sections,sources\} from '\.\/data\.js(?:\?[^']*)?';/,'');
 function harness(){const nodes=new Map();let saved='{}';const document={querySelector(id){if(!nodes.has(id))nodes.set(id,{value:'',checked:false,innerHTML:'',addEventListener(){},focus(){}});return nodes.get(id);},querySelectorAll(){return []}};const c=vm.createContext({sections,sources,document,localStorage:{getItem:()=>saved,setItem:(_,v)=>saved=v},setTimeout:fn=>fn(),confirm:()=>true,console});vm.runInContext(code,c);return {run:s=>vm.runInContext(s,c),node:id=>document.querySelector(id)};}
+test('Printed figures never acquire duplicate SVG callout lines',()=>{
+ const h=harness();
+ for(const section of sections)for(const v of section.views.filter(v=>!v.customLeaders)){
+  for(const overview of [true,false]){
+   h.run(`state.overview=${overview}`);
+   const html=h.run(`diagram(sections.find(s=>s.id===${JSON.stringify(section.id)}).views.find(v=>v.id===${JSON.stringify(v.id)}))`);
+   assert(!html.includes('class="callouts"'),v.id);
+   assert(!html.includes('<line '),v.id);
+  }
+ }
+});
+test('Nervous-system labels use the original label ends, including the branched nerve pointer',()=>{
+ const v=sections[0].views.find(v=>v.id==='nervous');
+ for(let i=0;i<v.targets.length;i++){
+  const g=illustrations.nervous,stroke=g.strokes[g.targets[i].leaders[0]];
+  assert.deepEqual(v.targets[i].leader[0],stroke.slice(0,2));
+ }
+});
+test('Close-up label anchors stay on the original printed segments',()=>{
+ const h=harness();
+ assert.equal(h.run('JSON.stringify(printedAnchor([[0,10],[100,50]],[25,0,50,80]))'),'[25,20]');
+ assert.equal(h.run('JSON.stringify(printedAnchor([[120,10],[90,10],[40,60]],[0,0,100,100]))'),'[100,10]');
+ assert.equal(h.run('printedAnchor([[0,0],[10,10]],[20,20,10,10])'),null);
+ for(const s of sections)for(const v of s.views)for(const p of v.targets.filter(p=>p.leader)){
+  for(const box of [[0,0,...v.size],v.focusBox,p.detail].filter(Boolean)){
+   const anchor=h.run(`printedAnchor(${JSON.stringify(p.leader)},${JSON.stringify(box)})`);
+   assert(anchor,v.id+' / '+p.name+' printed path must intersect its crop');
+   const [x,y,w,height]=box;
+   assert(anchor[0]>=x-.01&&anchor[0]<=x+w+.01&&anchor[1]>=y-.01&&anchor[1]<=y+height+.01);
+  }
+ }
+});
 test('Every figure exists and every marker lies within its image',()=>{let targets=0;for(const s of sections){assert(s.facts.length);for(const v of s.views){assert(fs.existsSync(new URL('../dist/assets/'+v.src,import.meta.url)));assert.equal(v.size.length,2);for(const t of v.targets){targets++;assert(t.name&&t.teach);assert(t.x>=0&&t.x<=100&&t.y>=0&&t.y<=100);if(t.pin)assert(t.pin.every(n=>n>=0&&n<=100));}}for(const q of s.facts){assert(q.options.includes(q.a));assert.equal(new Set(q.options).size,q.options.length);}}assert(targets>=80);});
 test('Every typed target and alias grades correctly; repeated submission cannot inflate score',()=>{const h=harness();for(const sec of sections){const bank=h.run(`bank(sections.find(s=>s.id==='${sec.id}'),'typed')`);for(const q of bank.filter(q=>q.type==='typed')){for(const name of [q.a,...(q.aliases||[])]){h.run(`state.session={questions:[${JSON.stringify(q)}],index:0,records:[],hint:false,answered:false};state.mode='practice';answer(${JSON.stringify(' '+name.toUpperCase()+' ')});`);assert(h.run('state.session.feedback.correct'));h.run("answer('not the answer')");assert.equal(h.run('state.session.records.length'),1);}}}});
 test('Location practice accepts only the correct marker and hint use remains assisted',()=>{const h=harness();h.run("state.session={questions:bank(sections[1],'locate'),index:0,records:[],hint:true,answered:false};state.mode='practice';answer(0)");assert(h.run('state.session.feedback.correct'));assert(h.run('state.session.feedback.assisted'));assert.equal(h.run('state.stats[state.session.questions[0].id].correct'),0);h.run("state.session.index=1;state.session.answered=false;state.session.hint=false;answer(0)");assert.equal(h.run('state.session.feedback.correct'),false);});

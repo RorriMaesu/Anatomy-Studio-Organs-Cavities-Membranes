@@ -12,6 +12,7 @@ An interactive companion to OpenStax *Anatomy and Physiology 2e*, inspired by [S
 - Show/hide labels, exact anatomical endpoints, fitted detail views, explanations, mnemonics, and common mistakes.
 - Desktop diagrams fit the available screen; teaching tabs and Previous/Next recall and review cards replace long scrolling pages.
 - Enlarged testis/epididymis and membrane views, individual small-organ crops, and selectable panels for densely labeled reference images.
+- Numbered labels reuse the textbook's printed callout lines. Close-ups anchor numbers to the visible portions of those same lines; no duplicate connectors are drawn over textbook diagrams.
 - Plane markers sit on distinct parts of the cutting surfaces; selecting a plane traces its outline.
 - Multiple-choice questions, typed labels, and diagram-location practice with immediate feedback.
 - Balanced 40- or 80-question exams, or the complete bank: 279 questions including optional extensions. Identification and location questions test the same targets in different ways.

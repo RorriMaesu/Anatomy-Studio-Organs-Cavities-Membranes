@@ -20,6 +20,13 @@ Live studio: https://rorrimaesu.github.io/Anatomy-Studio-Organs-Cavities-Membran
 
 ## Publication
 
+### Original callout lines — September 24, 2026
+
+- Removed added connectors from all textbook diagrams. Organ-system labels use the original leader ownership and source coordinates; membrane, cavity and plane labels have explicitly mapped printed paths.
+- Close-up labels follow the visible portion of the original line, including bent and branched paths. Added connectors remain only on the unlabeled online torso composite.
+- Adjusted membrane crops to retain printed pointers without fragments of neighboring labels. Compact desktop cavity diagrams place the key beneath the figure to preserve marker spacing.
+- Thirteen automated checks cover source-line anchors, crop intersections, no duplicate strokes, quiz scoring and previous regression cases. Browser checks covered atlas label spacing at 1366×768 and 1024×768, plus a three-question membrane location session with correct scoring.
+
 ### Desktop and diagram clarity update — September 23, 2026
 
 - Replaced scrolling/zoomed desktop figures with fitted SVG viewports. Teaching cards use tabs; concepts, sources and answer review use pagination.
