@@ -4,8 +4,29 @@ import vm from 'node:vm';
 import fs from 'node:fs';
 import {sections,sources} from '../dist/data.js';
 import {illustrations} from '../dist/system-geometry.js';
+test('Blender export has four anatomically oriented planes and a lightweight human',()=>{
+ const bytes=fs.readFileSync(new URL('../dist/assets/body-planes.glb',import.meta.url));
+ assert.equal(bytes.toString('ascii',0,4),'glTF');assert(bytes.length<2_000_000);
+ const gltf=JSON.parse(bytes.toString('utf8',20,20+bytes.readUInt32LE(12)));
+ assert(gltf.nodes.some(n=>n.name==='Human'));
+ const binStart=20+bytes.readUInt32LE(12)+8;
+ const coords=name=>{const n=gltf.nodes.find(n=>n.name===name);assert(n);const a=gltf.accessors[gltf.meshes[n.mesh].primitives[0].attributes.POSITION],v=gltf.bufferViews[a.bufferView];return Array.from({length:a.count},(_,i)=>Array.from({length:3},(_,j)=>bytes.readFloatLE(binStart+(v.byteOffset||0)+(a.byteOffset||0)+i*(v.byteStride||12)+j*4)));};
+ assert(coords('Sagittal').every(p=>Math.abs(p[0])<.0001));
+ assert(coords('Frontal').every(p=>Math.abs(p[2])<.0001));
+ assert(coords('Transverse').every(p=>Math.abs(p[1]-.94)<.0001));
+ assert(new Set(coords('Oblique').map(p=>p[1])).size>1);
+});
 const code=fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8').replace(/import \{sections,sources\} from '\.\/data\.js(?:\?[^']*)?';/,'');
 function harness(){const nodes=new Map();let saved='{}';const document={querySelector(id){if(!nodes.has(id))nodes.set(id,{value:'',checked:false,innerHTML:'',addEventListener(){},focus(){}});return nodes.get(id);},querySelectorAll(){return []}};const c=vm.createContext({sections,sources,document,localStorage:{getItem:()=>saved,setItem:(_,v)=>saved=v},setTimeout:fn=>fn(),confirm:()=>true,console});vm.runInContext(code,c);return {run:s=>vm.runInContext(s,c),node:id=>document.querySelector(id)};}
+test('3D quiz conceals names and selection; study labels and textbook fallback remain available',()=>{
+ const h=harness();h.run("state.section='planes'");
+ let html=h.run("diagram(currentView(),{quiz:true,target:1,locate:true})");
+ assert(html.includes('data-active="-1"'));assert.equal((html.match(/data-pin=/g)||[]).length,4);
+ for(const name of ['Sagittal','Frontal','Transverse','Oblique'])assert(!html.includes(name));
+ html=h.run("diagram(currentView(),{quiz:true,target:2})");assert(html.includes('data-active="2"'));assert(!html.includes('Transverse'));
+ assert(h.run('diagram(currentView())').includes('Sagittal plane'));
+ h.run('state.paperPlanes=true');assert(h.run('diagram(currentView())').includes('assets/planes.png'));
+});
 test('Printed figures never acquire duplicate SVG callout lines',()=>{
  const h=harness();
  for(const section of sections)for(const v of section.views.filter(v=>!v.customLeaders)){

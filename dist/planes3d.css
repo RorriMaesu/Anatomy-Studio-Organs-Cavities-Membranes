@@ -1,0 +1,15 @@
+.planes3d-card{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid #344750;border-radius:15px;overflow:hidden;background:#14232e;color:#eef7fa}
+.planes3d-card .panel-title{flex:none;background:#1b303c;color:#edf7ff;gap:8px}
+.planes3d-card button{font-size:11px;padding:7px 9px}
+.planes-stage{position:relative;flex:1;min-height:0;overflow:hidden;outline-offset:-3px}
+.planes-stage canvas{display:block;touch-action:none;width:100%;height:100%}
+.planes-status{position:absolute;left:12px;bottom:9px;right:12px;pointer-events:none;font-size:11px;color:#c1d1da;background:#14232ed9;padding:4px;border-radius:4px}
+.planes-controls{padding:9px;flex:none;display:grid;gap:8px;background:#1b303c}
+.plane-key,.camera-controls{display:flex;gap:5px;flex-wrap:wrap}
+.plane-key button{border-color:var(--plane-color);flex:1;white-space:nowrap}
+.plane-key b{color:var(--plane-color);margin-right:5px}
+.plane-key button[aria-pressed=true],.camera-controls button[aria-pressed=true]{background:#3c5059;color:white;box-shadow:inset 0 0 0 1px currentColor}
+.plane-key button:disabled{opacity:1;cursor:default}
+.planes3d-card .figure-credit{background:#14232e;color:#b7cbd5;flex:none;font-size:10px;padding:7px 12px}
+.planes3d-card a{color:#c9e3eb}
+@media(max-width:999px){.planes-stage{height:440px;flex:none}.planes3d-card .panel-title{flex-wrap:wrap}.plane-key button{font-size:10px}.planes-controls{padding:7px}}

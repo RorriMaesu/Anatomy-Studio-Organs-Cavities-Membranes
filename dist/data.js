@@ -134,7 +134,7 @@ const planePoints=[
 planePoints.forEach((p,i)=>Object.assign(planes.targets[i],p));
 planes.orientation='Oblique view: sagittal separates right/left; frontal separates front/back.';
 planes.note='Follow the highlighted surface, not the crossing label lines. Sagittal runs front to back through the midline; frontal runs side to side.';
-planes.targets[0].teach+=' In this oblique view, trace the highlighted plane from the back toward the front of the body.';
+planes.targets[0].teach+=' In 3D, rotate toward the side to see this vertical surface running from front to back.';
 planes.targets[1].teach+=' Trace the highlighted plane from shoulder to shoulder, separating the chest from the back.';
 const refs=sections.find(s=>s.id==='directions').views;
 refs[0].panels=[
@@ -214,3 +214,5 @@ male.targets[1].leader=[[77,302],[253,352]];
 torso.customLeaders=true;
 torso.targets[8].pin=[78,65];
 torso.targets[10].pin=[80,75];
+
+sources.push({title:'Interactive 3D human and body planes',url:'https://download.blender.org/demo/asset-bundles/human-base-meshes/',text:'Human Base Meshes by Blender Foundation, Blender Studio and the Blender community. CC0, per the bundle README. Neutral materials and four cutting surfaces authored in Blender 4.5.1 LTS. Rotate with mouse/touch or arrow keys; use Front, Side and Top to compare orientations. All planes shows the intersection; See through body reveals the surfaces inside. The editable Blender scene is included in the repository. Three.js 0.180.0 is bundled under the MIT license.'});

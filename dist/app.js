@@ -1,4 +1,4 @@
-import {sections,sources} from './data.js?v=20260924-3';
+import {sections,sources} from './data.js?v=20260924-5';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const key='soma-inside-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')||{};}catch{}
@@ -24,7 +24,20 @@ function printedAnchor(path,box){
  }
  return null;
 }
-function diagram(v,{quiz=false,target=-1,locate=false,reveal=false}={}){
+function diagram(v,options={}){
+ if(v?.id!=='planes'||state.paperPlanes)return textbookDiagram(v,options);
+ const {quiz=false,target=-1,locate=false,reveal=false}=options,active=quiz?((!locate||reveal)?target:-1):state.target;
+ return `<section class="planes3d-card" data-active="${active}" data-quiz="${quiz}" data-locate="${locate}"><div class="panel-title"><strong>Body planes · interactive 3D</strong><button data-fallback>Textbook view</button></div><div class="planes-stage"><span class="planes-status" role="status">Loading human model…</span></div><div class="planes-controls"><div class="plane-key">${v.targets.map((p,i)=>`<button data-pin="${i}" style="--plane-color:${['#ff7549','#42b8ff','#ffd342','#bd86ff'][i]}" aria-label="${quiz||!state.labels?'Marker '+(i+1):esc(p.name)}" aria-pressed="${i===active}" ${quiz&&(!locate||state.session?.answered)?'disabled':''}><b>${i+1}</b>${!quiz&&state.labels?esc(p.name):'Plane '+(i+1)}</button>`).join('')}</div><div class="camera-controls" aria-label="Camera views">${[['home','3D view'],['front','Front'],['side','Side'],['top','Top']].map(([id,label])=>`<button data-camera="${id}">${label}</button>`).join('')}${!quiz?'<button data-all aria-pressed="false">All planes</button>':''}<button data-ghost aria-pressed="false">See through body</button></div></div><div class="figure-credit">Human base mesh: <a href="https://download.blender.org/demo/asset-bundles/human-base-meshes/" target="_blank" rel="noopener">Blender / CC0</a> · Planes authored in Blender 4.5</div></section>`;
+}
+function syncPlanes(){
+ if(typeof window==='undefined')return;
+ const card=document.querySelector('.planes3d-card');
+ const fallback=card?.querySelector('[data-fallback]');
+ if(fallback)fallback.onclick=()=>{state.paperPlanes=true;render();};
+ if(card)import('./planes3d.js?v=20260924-5').then(m=>{if(card.isConnected)m.mountPlanes(card).catch(()=>{if(card.isConnected){state.paperPlanes=true;render();}});}).catch(()=>{if(card.isConnected){state.paperPlanes=true;render();}});
+ if(state.paperPlanes&&document.querySelector('[data-view="planes"]')){const b=document.createElement('button');b.textContent='Return to interactive 3D';b.onclick=()=>{state.paperPlanes=false;render();};document.querySelector('[data-view="planes"] .panel-title').append(b);}
+}
+function textbookDiagram(v,{quiz=false,target=-1,locate=false,reveal=false}={}){
  if(!v)return '';const labels=!quiz&&state.labels,mask=(v.alwaysMask||!labels)&&!v.studyOnly;
  const active=quiz?((!locate||reveal)?target:-1):state.target;
  const crop=!state.overview&&((!quiz||!locate)&&v.targets[active]?.detail||v.panels?.[state.figurePage||0]?.box||v.focusBox)||[0,0,...v.size];
@@ -62,7 +75,7 @@ function sourcesPage(){const i=state.sourcePage||0;const pages=[
  ['Extra membrane worksheet','<p><a href="assets/serosa-numbered.jpg" target="_blank">Open the numbered serous-membrane worksheet ↗</a></p><p>Answer key: 1. Visceral pericardium · 2. Pericardial cavity · 3. Parietal pericardium · 4. Air space in the balloon analogy · 5. Balloon.</p><p>Access for free at <a href="https://openstax.org">openstax.org</a>. No OpenStax endorsement is implied.</p>']
  ];const page=pages[i%pages.length];return `<p class="eyebrow">BUILT FOR UNDERSTANDING</p><h1>Sources & study guide</h1><div class="source-pages"><section class="lesson"><h2>${esc(page[0])}</h2>${page[1]}</section>${pager('sourcePage',i,pages.length)}</div>`;}
 
-function render(){let body;if(state.mode==='sources')body=sourcesPage();else if(state.mode==='results')body=results();else if(state.mode==='study')body=study();else body=state.session?question():setup(state.mode==='exam');$('#app').innerHTML=header()+`<div class="shell">${sidebar()}<main id="main">${body}${footer()}</main></div>`;bind();}
+function render(){if(typeof window!=='undefined')document.querySelector('.planes3d-card')?.cleanup3D?.();let body;if(state.mode==='sources')body=sourcesPage();else if(state.mode==='results')body=results();else if(state.mode==='study')body=study();else body=state.session?question():setup(state.mode==='exam');$('#app').innerHTML=header()+`<div class="shell">${sidebar()}<main id="main">${body}${footer()}</main></div>`;bind();syncPlanes();}
 function leave(){return !state.session||state.mode==='results'||confirm('Leave this unfinished session? Answers already submitted remain in local learning history.');}
 function navigate(mode){if(!leave())return;state.mode=mode;state.session=null;state.zoom=1;if(state.format==='locate'&&!section().views.some(v=>v.targets.length))state.format='mixed';render();}
 function selectSection(id){if(!leave())return;state.section=id;state.figurePage=0;state.factPage=0;state.factReveal=false;state.lessonTab='structure';state.overview=false;state.view=0;state.target=0;state.zoom=1;state.mode='study';state.session=null;persist();render();}
