@@ -11,4 +11,35 @@ test('Location practice accepts only the correct marker and hint use remains ass
 test('Standard 40-question exam balances all 8 sections and excludes extensions',()=>{const h=harness();h.node('#exam-length').value='40';h.node('#extensions').checked=false;h.run('start(true)');assert.equal(h.run('state.session.questions.length'),40);for(const s of sections)assert.equal(h.run(`state.session.questions.filter(q=>q.section==='${s.id}').length`),5);assert.equal(h.run("state.session.questions.filter(q=>q.q.startsWith('Extension:')||q.view==='meninges').length"),0);h.run('answer(state.session.questions[0].type===\'locate\'?state.session.questions[0].target:state.session.questions[0].a)');assert(h.node('#app').innerHTML.includes('Answer recorded.'));assert(!h.node('#app').innerHTML.includes('class="feedback good"'));});
 test('Complete bank, practice limits, mistakes, skipping and results',()=>{const h=harness();h.node('#exam-length').value='all';h.node('#extensions').checked=true;h.run('start(true)');const expected=h.run('sections.reduce((n,s)=>n+bank(s).length,0)');assert.equal(h.run('state.session.questions.length'),expected);assert.equal(h.run('new Set(state.session.questions.map(q=>q.id)).size'),expected);h.run("state.session=null;state.section='planes'");h.node('#format').value='choice';h.node('#scope').value='planes';h.node('#practice-length').value='10';h.run('start(false)');assert.equal(h.run('state.session.questions.length'),4);h.run("answer('Skipped');state.session.index++;state.session.answered=false;answer('wrong')");assert.equal(h.run('state.session.records.filter(r=>r.correct).length'),0);const html=h.run('results()');assert(html.includes('0 of 2'));assert(html.includes('Practice missed & assisted (2)'));});
 test('Storage denial and corrupt saved preferences do not stop the app',()=>{const document={querySelector:()=>({innerHTML:'',addEventListener(){}}),querySelectorAll:()=>[]};const c=vm.createContext({sections,sources,document,localStorage:{getItem(){throw Error('blocked')},setItem(){throw Error('blocked')}},setTimeout:()=>{},console});vm.runInContext(code,c);vm.runInContext('persist()',c);assert(vm.runInContext('state.storageError',c));});
-test('Typed drafts survive hint and zoom renders, and review identifies the original diagram',()=>{const h=harness();h.run("state.session={questions:bank(sections.find(s=>s.id==='planes'),'typed','planes'),index:0,records:[],hint:false,answered:false,draft:'coronal plane'};state.mode='practice';render()");assert(h.node('#app').innerHTML.includes('value="coronal plane"'));h.run('state.zoom=1.5;state.session.hint=true;render()');assert(h.node('#app').innerHTML.includes('value="coronal plane"'));h.run("answer('wrong');state.mode='results';render()");assert(h.node('#app').innerHTML.includes('class="review-figure"'));assert(h.node('#app').innerHTML.includes('Four ways to section the body'));assert(h.node('#app').innerHTML.includes('assets/planes.png'));});
+test('Typed drafts survive detail and hint renders, and review identifies the original diagram',()=>{const h=harness();h.run("state.session={questions:bank(sections.find(s=>s.id==='planes'),'typed','planes'),index:0,records:[],hint:false,answered:false,draft:'coronal plane'};state.mode='practice';render()");assert(h.node('#app').innerHTML.includes('value="coronal plane"'));h.run('state.overview=true;state.session.hint=true;render()');assert(h.node('#app').innerHTML.includes('value="coronal plane"'));h.run("answer('wrong');state.mode='results';render()");assert(h.node('#app').innerHTML.includes('class="review-figure"'));assert(h.node('#app').innerHTML.includes('Four ways to section the body'));assert(h.node('#app').innerHTML.includes('assets/planes.png'));});
+test('Shared detail views retain all location targets; individual crops retain their target',()=>{
+ for(const s of sections)for(const v of s.views)for(const p of v.targets){
+  for(const box of [v.focusBox,p.detail].filter(Boolean)){
+   const [x,y,w,h]=box,px=p.x*v.size[0]/100,py=p.y*v.size[1]/100;
+   assert(px>=x&&px<=x+w&&py>=y&&py<=y+h,v.id+' / '+p.name+' is outside its crop');
+  }
+ }
+});
+test('Location quizzes retain every candidate and do not highlight the answer before submission',()=>{
+ const h=harness();
+ for(const s of sections)for(const v of s.views.filter(v=>v.targets.length)){
+  for(let i=0;i<v.targets.length;i++){
+   const html=h.run(`diagram(sections.find(s=>s.id===${JSON.stringify(s.id)}).views.find(v=>v.id===${JSON.stringify(v.id)}),{quiz:true,locate:true,target:${i}})`);
+   assert.equal((html.match(/data-pin="/g)||[]).length,v.targets.length,v.id);
+   assert(!html.includes('pin selected'),v.id);
+   assert(!html.includes('class="plane-surface"'),v.id);
+  }
+ }
+});
+test('Recall cards and results show only the requested page',()=>{
+ const h=harness();
+ h.run("state.section='chemistry';state.factPage=1;state.factReveal=true");
+ const study=h.run('study()');
+ assert(study.includes(sections.find(s=>s.id==='chemistry').facts[1].q));
+ assert(!study.includes(sections.find(s=>s.id==='chemistry').facts[0].q));
+ h.run("state.session={exam:false,records:bank(sections.find(s=>s.id==='planes'),'locate').map(q=>({q,answer:'Skipped',correct:false,assisted:false}))};state.reviewPage=2");
+ const result=h.run('results()');
+ assert(result.includes('ANSWER 3'));
+ assert(result.includes('Locate the transverse plane.'));
+ assert(!result.includes('Locate the sagittal plane.'));
+});

@@ -20,6 +20,16 @@ Live studio: https://rorrimaesu.github.io/Anatomy-Studio-Organs-Cavities-Membran
 
 ## Publication
 
+### Desktop and diagram clarity update — September 23, 2026
+
+- Replaced scrolling/zoomed desktop figures with fitted SVG viewports. Teaching cards use tabs; concepts, sources and answer review use pagination.
+- Added a dedicated testis/epididymis image from textbook Figure 27.4. Added enlarged membrane views and enabled individual small-organ crops from the original geometry.
+- Marker leader lines end in open rings so narrow layers remain visible. Shared location-quiz crops preserve every answer candidate.
+- Moved sagittal/frontal markers to separate visible portions of their planes and added cutting-surface outlines. Definitions and plane orientation were checked against OpenStax §1.6; the original source definitions were already correct.
+- Added selectable close-up panels for directional and surface-region reference figures.
+- Ten automated tests pass, including crop coverage, no premature answer highlighting in location quizzes, pagination and quiz regression checks.
+- Browser verification: all 22 atlas views at 1366×768 and 1280×720; section navigation, all Chapter 1/2 essentials recall cards, sources, membrane practice and a complete 40-question exam at 1024×768. Compact 1280×600 checks covered the longest label keys and teaching cards. Mobile detail controls checked at 390px.
+
 - The saved checkpoint was committed and pushed to https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes.
 - GitHub Pages is enabled for the main branch at the repository root; its initial deployment returned HTTP 200.
 - Subsequent improvements are published through the same branch. See the Git history for each version.

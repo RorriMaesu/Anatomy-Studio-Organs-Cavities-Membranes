@@ -9,7 +9,10 @@ An interactive companion to OpenStax *Anatomy and Physiology 2e*, inspired by [S
 - Eight sections, 22 diagrams, 92 labeling targets, and 95 concept questions.
 - Major organs and all eleven organ systems; cavities; serous membranes and optional meninges; abdominal regions and quadrants; anatomical directions and planes.
 - Chapter 1 foundations and Chapter 2 chemistry review.
-- Show/hide labels, numbered callouts, zoom, explanations, mnemonics, and common mistakes.
+- Show/hide labels, exact anatomical endpoints, fitted detail views, explanations, mnemonics, and common mistakes.
+- Desktop diagrams fit the available screen; teaching tabs and Previous/Next recall and review cards replace long scrolling pages.
+- Enlarged testis/epididymis and membrane views, individual small-organ crops, and selectable panels for densely labeled reference images.
+- Plane markers sit on distinct parts of the cutting surfaces; selecting a plane traces its outline.
 - Multiple-choice questions, typed labels, and diagram-location practice with immediate feedback.
 - Balanced 40- or 80-question exams, or the complete bank: 279 questions including optional extensions. Identification and location questions test the same targets in different ways.
 - Answer review includes the original diagram and correct anatomical location. Retry missed and assisted questions.
@@ -36,7 +39,7 @@ GitHub Pages publishes `main` from the repository root. The root HTML redirects 
 
 ## Sources and license
 
-- OpenStax *Anatomy and Physiology 2e*, supplied 2026 PDF, © Rice University, CC BY-NC-SA 4.0. Figures 1.4, 1.5, 1.12–1.17, 13.17, 22.14 and 23.4 were extracted or cropped; removable label covers, anatomical markers and leader lines were added. Access for free at [openstax.org](https://openstax.org/details/books/anatomy-and-physiology-2e).
+- OpenStax *Anatomy and Physiology 2e*, supplied 2026 PDF, © Rice University, CC BY-NC-SA 4.0. Figures 1.4, 1.5, 1.12–1.17, 13.17, 22.14, 23.4 and 27.4 were extracted or cropped; removable label covers, anatomical markers, leader lines and plane highlights were added. Access for free at [openstax.org](https://openstax.org/details/books/anatomy-and-physiology-2e).
 - [Man shadow with organs](https://commons.wikimedia.org/wiki/File:Man_shadow_with_organs.png), Mikael Häggström, CC0. Used as the transparent organ overview with added markers.
 - [Female shadow anatomy without labels](https://commons.wikimedia.org/wiki/File:Female_shadow_anatomy_without_labels.png), Mikael Häggström, public domain. Included as a supplemental source asset.
 - [Numbered serous membrane diagram](https://commons.wikimedia.org/wiki/File:112_Serous_Membrane_labeled.jpg), OpenStax, CC BY 3.0. Available through Sources & help as an extra worksheet.

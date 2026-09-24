@@ -78,3 +78,75 @@ for(const v of systemViews)v.targets.forEach((p,i)=>p.pin=[i%2?88:12,12+i*72/Mat
 // Keep adjacent neck, upper-abdominal and pleural markers distinct on phones.
 [[1,[70,34]],[2,[28,40]],[6,[18,63]],[7,[20,71]],[9,[22,79]]].forEach(([i,pin])=>torso.targets[i].pin=pin);
 pleura.targets[2].pin=[92,63];
+
+// Shared anatomical crops keep every location-test target visible.
+serosa.focusBox=[0,105,355,290];
+serosa.targets.forEach((p,i)=>p.focusPin=[94,12+i*34]);
+serosa.orientation='Heart detail: the organ surface, fluid space and outer lining are separate targets.';
+pleura.focusBox=[1438,273,470,480];
+pleura.targets[0].focusPin=[94,25];
+pleura.targets[1].focusPin=[10,65];
+pleura.targets[2].focusPin=[94,92];
+pleura.targets[2].x=91.95;pleura.targets[2].y=45;
+peritoneum.focusBox=[210,370,390,175];
+peritoneum.alwaysMask=true;
+meninges.focusBox=[205,65,545,200];
+meninges.alwaysMask=true;
+// Use a point within a continuous part of each layer, away from crossing source leader lines.
+meninges.targets[0].x=70;meninges.targets[0].y=32.5;
+meninges.targets[1].x=25;meninges.targets[1].y=36.8;
+meninges.targets[2].x=39.6;meninges.targets[2].y=40.5;
+
+for(const v of systemViews){
+ const g=illustrations[v.id];
+ v.targets.forEach(p=>{
+  const organ=systems.find(s=>s.organs.some(o=>o[0]===p.name)&&s.id===(v.id.startsWith('reproductive')?'reproductive':v.id));
+  const index=organ?.organs.findIndex(o=>o[0]===p.name);
+  const d=g.targets[index]?.detail;
+  if(d)p.detail=d;
+ });
+ // Remove empty lower limbs from systems whose targets are in the head and trunk.
+ const bottom=Math.min(v.size[1],Math.max(...v.targets.map(p=>p.y*v.size[1]/100))+45);
+ if(bottom<v.size[1]*.8)v.focusBox=[0,0,v.size[0],bottom];
+}
+const male=systemViews.find(v=>v.id==='reproductive-male');
+Object.assign(male,{
+ title:'Testis & epididymis · enlarged section',src:'testis-detail.jpg',size:[743,686],
+ focusBox:[110,120,480,545],mask:[[0,43,11,6],[80,40,20,9],[54,95,26,5]],
+ source:{...source('Fig. 27.4'),url:'https://openstax.org/books/anatomy-and-physiology-2e/pages/27-1-anatomy-and-physiology-of-the-testicular-reproductive-system'},
+ orientation:'Sagittal section of one testis. The epididymis curves around its posterior surface.',
+ memory:'Testis = sperm factory. Epididymis = the coiled finishing and storage duct along its back.',
+ note:'This later-chapter close-up separates the same two organs introduced in Chapter 1.'
+});
+Object.assign(male.targets[0],{x:50,y:65,pin:[88,72],detail:undefined,aliases:['testis','testicle','testicles'],teach:'The large oval organ in this section is one testis (plural: testes). Its seminiferous tubules produce sperm. The testes lie in the scrotum, outside the pelvic cavity.'});
+Object.assign(male.targets[1],{x:32.8,y:51.7,pin:[8,36],detail:undefined,teach:'The epididymis is the pale coiled duct attached along the posterior surface of the testis. Its head, body and tail support sperm maturation and storage; it is outside the testicular tissue.'});
+male.targets[0].focusPin=[91,62];
+male.targets[1].focusPin=[8,44];
+
+// Trace the full cutting surface instead of placing numbers on crossing label leaders.
+planes.alwaysMask=true;
+const planePoints=[
+ {x:56,y:92,pin:[87,94],surface:[[26.6,1.3],[59.3,5.4],[59.3,94.5],[26.6,88.8]]},
+ {x:18,y:61,pin:[8,61],surface:[[14.5,7.5],[66.9,.2],[66.9,85.1],[14.5,99.6]]},
+ {x:74,y:39,pin:[90,43],surface:[[.5,40.6],[48,32.8],[86,39.6],[35.7,48.3]]},
+ {x:54,y:79,pin:[88,78],surface:[[27.8,72.9],[45.5,70.5],[59.2,80.6],[39.5,85.2]]}
+];
+planePoints.forEach((p,i)=>Object.assign(planes.targets[i],p));
+planes.orientation='Oblique view: sagittal separates right/left; frontal separates front/back.';
+planes.note='Follow the highlighted surface, not the crossing label lines. Sagittal runs front to back through the midline; frontal runs side to side.';
+planes.targets[0].teach+=' In this oblique view, trace the highlighted plane from the back toward the front of the body.';
+planes.targets[1].teach+=' Trace the highlighted plane from shoulder to shoulder, separating the chest from the back.';
+const refs=sections.find(s=>s.id==='directions').views;
+refs[0].panels=[
+ {name:'Side view · anterior / posterior',box:[0,0,590,690]},
+ {name:'Front view · upper body',box:[580,0,723,810]},
+ {name:'Front view · lower body',box:[535,610,768,713]}
+];
+refs[1].panels=[
+ {name:'Anterior · head & neck',box:[0,0,1250,470]},
+ {name:'Anterior · trunk & upper limbs',box:[0,390,1260,1000]},
+ {name:'Anterior · lower limbs',box:[0,1070,1260,995]},
+ {name:'Posterior · head & trunk',box:[1280,0,1067,975]},
+ {name:'Posterior · limbs',box:[1130,850,1217,1215]}
+];
+sources[0].text+=' Figure 27.4 supplies a detailed testis and epididymis view. Enlarged crops preserve the original anatomical artwork.';
