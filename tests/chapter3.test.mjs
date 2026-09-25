@@ -24,6 +24,12 @@ test('Every question accepts its intended answer; location requires a numeric ta
  for(const q of bank){assert(grade(q,q.answer));assert(!grade(q,'definitely not the answer'));if(q.type==='locate')assert(!grade(q,String(q.answer)));else assert(grade(q,' '+q.answer.toUpperCase()+' '));}
  assert.deepEqual(score([{correct:true,assisted:false},{correct:true,assisted:true},{correct:false,assisted:false}]),{total:3,independent:1,assisted:1,missed:2});
 });
+test('Typed recall accepts common abbreviations and equivalent anatomy names',()=>{
+ assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Messenger RNA (mRNA)'),'mRNA'));
+ assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Endoplasmic reticulum (ER)'),'endoplasmic reticulum'));
+ assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Cell membrane'),'plasma membrane'));
+ assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Rough ER'),'rough endoplasmic reticulum'));
+});
 function harness(){const nodes=new Map(),document={querySelector(s){if(!nodes.has(s))nodes.set(s,{innerHTML:'',value:'',checked:false,addEventListener(){},focus(){}});return nodes.get(s);},querySelectorAll(){return []}};const c=vm.createContext({modules,diagrams,references,buildBank,createSession,grade,score,document,localStorage:{getItem(){return '{}'},setItem(){}},confirm:()=>true});let code=fs.readFileSync(new URL('../dist/chapter3/studio.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');vm.runInContext(code,c);return s=>vm.runInContext(s,c);}
 test('Location quizzes conceal selection, label names and premature exam feedback',()=>{
  const run=harness();run("start(false,[bank.find(q=>q.type==='locate')])");let html=run('quiz()');assert(!html.includes('diagram-pin active'));assert(!html.includes('diagram-key'));assert.equal((html.match(/data-target=/g)||[]).length,diagrams.membrane[0].targets.length);

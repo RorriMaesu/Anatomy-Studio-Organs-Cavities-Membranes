@@ -60,3 +60,11 @@ With Node.js installed, run `npm test` to run the automated checks. No package i
 This ZIP saves the project files. Browser-only quiz history and any in-progress quiz are not included. Git internals and temporary working files are excluded. The full source textbook PDF is not bundled; the extracted figures used by the studio are included.
 
 The atlas covers major introductory structures, not every named organ or membrane in the human body. Meninges and additional membrane concepts are marked as extensions. See Sources & help in the application for attribution and licensing; OpenStax-derived adaptations use CC BY-NC-SA 4.0.
+
+
+## Chapter 3 Cell Studio (2026-09-25)
+
+- Stage 1 (`bcf0935`): separate chapter page, six-module map, development plan and link from the original atlas. Published successfully.
+- Stage 2 (`d90feca`): 53 lessons, 10 schematic diagrams/78 targets, 10 textbook figures, 152 vocabulary entries and recall cards. Published successfully.
+- Stage 3: six interactive labs, separate 404-question bank, balanced chapter exams, assisted scoring, answer review and retry, common typed-answer aliases, and persistent chapter-only scores. Validated before publication.
+- Browser checks: diagram alignment, original image loading, all six labs, full practice and 30-question exam walkthroughs, compact desktop and mobile layouts. Unit tests cover model biology, lab actions, question-bank coverage, grading and quiz concealment.

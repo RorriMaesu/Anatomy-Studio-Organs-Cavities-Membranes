@@ -47,3 +47,15 @@ GitHub Pages publishes `main` from the repository root. The root HTML redirects 
 - System illustration coordinates, extracted images and related teaching content adapted from the user's Soma Anatomy Studio under CC BY-NC-SA 4.0.
 
 Code and educational adaptations are distributed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Third-party images retain their respective licenses. No OpenStax endorsement is implied.
+
+## Chapter 3: Cell Studio
+
+[Open Cell Studio](https://rorrimaesu.github.io/Anatomy-Studio-Organs-Cavities-Membranes/dist/chapter3/)
+
+Chapter 3 has a separate page, navigation, question bank, chapter exam, and local progress record. The six modules cover sections 3.1–3.6 of the supplied textbook. Features include 53 concise lessons, 10 original interactive schematics with 78 label targets, 10 original labeled textbook figures, 152 contextual vocabulary entries, and 6 process labs. The 404-question practice bank includes 96 applied multiple-choice questions plus typed definitions and diagram identification/location.
+
+The labs cover tonicity, secretion routing, DNA complementarity, transcription/translation, chromosome accounting through division, and stem-cell potency. Lessons include memory cues and common mistakes. Exams offer 30/60/all questions, balanced across modules; feedback waits until submission. Assisted responses are separate from independent recall, and missed questions can be retried. Unfinished sessions are not restored after a reload.
+
+Source review and stage plan: [DEVELOPMENT](source/chapter3/DEVELOPMENT.md). Detailed curriculum mapping: [COVERAGE](source/chapter3/COVERAGE.md). Figure sources and schematic simplifications: [FIGURES](source/chapter3/FIGURES.md). Artwork and text are educational adaptations under CC BY-NC-SA 4.0. Ten reference figures retain their original labels; no new connector lines are added to them.
+
+Chapter 3 is served directly from `dist/chapter3/`; there is no build step. The entry module is `studio.js`, with `content.js`, `diagrams.js`, `engine.js`, and `labs.js`. Chapter 3 browser storage uses `soma-cell-studio-v1`, separate from the older atlas. Run `npm test` for the complete suite.

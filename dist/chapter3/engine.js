@@ -1,14 +1,16 @@
-export const normalize=value=>String(value??'').toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9]+/g,' ').replace(/\b(the|a|an)\b/g,'').replace(/\s+/g,' ').trim();
+export const normalize=value=>String(value??'').normalize('NFKC').toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9]+/g,' ').replace(/\b(the|a|an)\b/g,'').replace(/\s+/g,' ').trim();
 export function shuffled(items,random=Math.random){const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const synonymGroups=[['cell membrane','plasma membrane'],['rough er','rough endoplasmic reticulum','rer'],['smooth er','smooth endoplasmic reticulum','ser'],['golgi apparatus','golgi complex','golgi body'],['nuclear envelope','nuclear membrane'],['polyribosome','polysome'],['mitochondrion','mitochondria'],['flagellum','flagella'],['microfilament','actin filament'],['sodium-potassium pump','na k pump','na k atpase','sodium potassium atpase'],['sister chromatid','sister chromatids'],['homologous chromosome','homologous chromosomes','homolog'],['free ribosomes','free ribosome'],['g1 phase','g1'],['g2 phase','g2'],['g0 phase','g0'],['s phase','synthesis phase','s'],['differentiation','cellular differentiation']];
+function aliases(name,extra=[]){const plain=name.replace(/\s*\([^)]*\)/g,'').trim(),short=[...name.matchAll(/\(([^)]+)\)/g)].map(m=>m[1]);const group=synonymGroups.find(g=>g.some(x=>normalize(x)===normalize(plain)))||[];return [...new Set([...extra,plain,...short,...group])];}
 export function buildBank(modules,diagrams){
  const bank=[];
  for(const m of modules){
   for(const q of m.questions)bank.push({...q,id:`${m.id}/concept/${q.id}`,module:m.id,type:'choice',answer:q.options[q.answer]});
   for(const d of diagrams[m.id]||[])d.targets.forEach((t,i)=>{
    bank.push({id:`${m.id}/${d.id}/${t.id}/locate`,module:m.id,type:'locate',prompt:`Locate the ${t.name.toLowerCase()}.`,answer:i,answerText:t.name,explanation:t.description,diagram:d.id,target:i});
-   bank.push({id:`${m.id}/${d.id}/${t.id}/typed`,module:m.id,type:'typed',prompt:`Name the structure at marker ${i+1}.`,answer:t.name,aliases:t.aliases||[],explanation:t.description,diagram:d.id,target:i});
+   bank.push({id:`${m.id}/${d.id}/${t.id}/typed`,module:m.id,type:'typed',prompt:`Name the structure at marker ${i+1}.`,answer:t.name,aliases:aliases(t.name,t.aliases),explanation:t.description,diagram:d.id,target:i});
   });
-  m.terms.forEach((t,i)=>bank.push({id:`${m.id}/term/${i}`,module:m.id,type:'typed',prompt:`Name the term: ${t.definition}`,answer:t.term,aliases:t.aliases||[],explanation:t.definition}));
+  m.terms.forEach((t,i)=>bank.push({id:`${m.id}/term/${i}`,module:m.id,type:'typed',prompt:`Name the term: ${t.definition}`,answer:t.term,aliases:aliases(t.term,t.aliases),explanation:t.definition}));
  }
  return bank;
 }
