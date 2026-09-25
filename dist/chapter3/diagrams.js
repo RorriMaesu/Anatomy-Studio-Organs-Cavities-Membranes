@@ -83,8 +83,8 @@ transcription+=path('M72 122H234Q324 58 421 122H731',C.blue,6)+path('M72 162H234
 for(let x=81;x<=717;x+=20){if(x<227||x>434)transcription+=path(`M${x} 125V159`,C.muted,3);}
 transcription+=ellipse(345,144,59,57,'#493b65',`stroke="${C.violet}" stroke-width="4"`);
 transcription+=path('M342 165Q323 185 299 186L205 214H107',C.coral,6);
-transcription+=txt(320,169,'U A C',C.light,13)+txt(331,198,'A U G',C.light,13);
-transcription+=arrow(476,216,670,216,C.muted);
+transcription+=txt(320,169,'T A C',C.light,13)+txt(331,198,'A U G',C.light,13);
+transcription+=arrow(476,216,670,216,C.muted)+txt(81,100,'5′',C.blue,14)+txt(720,100,'3′',C.blue,14)+txt(81,185,'3′',C.cyan,14)+txt(720,185,'5′',C.cyan,14)+txt(102,235,'5′',C.coral,14)+txt(350,218,'3′',C.coral,14);
 transcription+=`<rect x="89" y="319" width="113" height="27" rx="5" fill="${C.cyan}"/><rect x="202" y="319" width="104" height="27" rx="5" fill="${C.muted}"/><rect x="306" y="319" width="113" height="27" rx="5" fill="${C.cyan}"/><rect x="419" y="319" width="104" height="27" rx="5" fill="${C.muted}"/><rect x="523" y="319" width="113" height="27" rx="5" fill="${C.cyan}"/>`;
 transcription+=path('M201 350Q253 398 306 350M419 350Q470 398 523 350',C.muted,3,'stroke-dasharray="5 6"');
 transcription+=`<rect x="190" y="412" width="113" height="27" rx="5" fill="${C.cyan}"/><rect x="303" y="412" width="113" height="27" rx="5" fill="${C.cyan}"/><rect x="416" y="412" width="113" height="27" rx="5" fill="${C.cyan}"/>`+circle(177,425,12,C.gold)+path('M532 425h120',C.coral,5)+txt(600,417,'A A A A A',C.coral,12);

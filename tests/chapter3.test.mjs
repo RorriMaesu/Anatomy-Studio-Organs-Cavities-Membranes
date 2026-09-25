@@ -38,3 +38,23 @@ test('Location quizzes conceal selection, label names and premature exam feedbac
 test('Typed drafts survive hints, assisted scoring and double-submit protection',()=>{
  const run=harness();run("start(false,[bank.find(q=>q.type==='typed')]);state.session.draft='my draft';state.session.hint=true");assert(run('quiz()').includes('my draft'));run('submit(state.session.questions[0].answer);submit(state.session.questions[0].answer)');assert.equal(run('state.session.records.length'),1);assert.equal(run('score(state.session.records).independent'),0);assert.equal(run('score(state.session.records).assisted'),1);
 });
+
+test('Ending early records skipped answers consistently without duplicating submitted answers',()=>{
+ const run=harness();run("start(false,bank.filter(q=>q.type==='choice').slice(0,3));submit(state.session.questions[0].answer);endSession()");
+ assert.equal(run('state.session.records.length'),3);assert.equal(run('score(state.session.records).independent'),1);
+ assert.equal(run('state.stats[state.session.questions[1].id].lastCorrect'),false);
+ assert.equal(run('state.stats[state.session.questions[0].id].attempts'),1);
+});
+test('Diagram answer review restores the figure and correct marker with inert controls',()=>{
+ const run=harness();run("start(true,[bank.find(q=>q.type==='locate')]);endSession()");const html=run('results()');
+ assert(html.includes('diagram-wrap'));assert(html.includes('diagram-pin active'));assert(html.includes('Correct answer:'));
+ for(const pin of html.matchAll(/<button class="diagram-pin[^>]*>/g))assert(pin[0].includes('disabled'));
+});
+test('Common biological singulars and RNA full names grade without accepting blank answers',()=>{
+ for(const [name,value] of [['Cilia','cilium'],['Centrioles','centriole'],['mRNA','messenger RNA'],['Platelets','platelet'],['Homologous chromosomes','homologous']])assert(grade(bank.find(q=>q.type==='typed'&&q.answer===name),value));
+ for(const q of bank.filter(q=>q.type==='typed'))assert(!grade(q,''));
+});
+test('Transcription schematic uses thymine in DNA and indicates strand orientation',()=>{
+ const svg=diagrams.protein.find(d=>d.id==='transcription-splicing').svg;
+ assert(svg.includes('T A C'));assert(!svg.includes('U A C'));assert(svg.includes('A U G'));assert(svg.includes('5′'));assert(svg.includes('3′'));
+});

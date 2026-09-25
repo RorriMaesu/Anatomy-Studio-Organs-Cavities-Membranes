@@ -68,3 +68,11 @@ The atlas covers major introductory structures, not every named organ or membran
 - Stage 2 (`d90feca`): 53 lessons, 10 schematic diagrams/78 targets, 10 textbook figures, 152 vocabulary entries and recall cards. Published successfully.
 - Stage 3: six interactive labs, separate 404-question bank, balanced chapter exams, assisted scoring, answer review and retry, common typed-answer aliases, and persistent chapter-only scores. Validated before publication.
 - Browser checks: diagram alignment, original image loading, all six labs, full practice and 30-question exam walkthroughs, compact desktop and mobile layouts. Unit tests cover model biology, lab actions, question-bank coverage, grading and quiz concealment.
+
+## Review phase 1 — September 25, 2026
+
+- Corrected a transcription schematic that used U in a DNA template; added strand-direction labels.
+- Restored the original diagram and correct highlighted marker in Chapter 3 answer review.
+- Unified early-ending skip records with regular answer history; prevented duplicate records.
+- Added common singular/plural and RNA-name aliases, preserved keyboard focus on repeated controls, and added unfinished-session navigation warnings.
+- 35 automated tests pass, including new regression cases. Corrected diagram visually verified locally.
