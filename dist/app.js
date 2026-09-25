@@ -1,4 +1,4 @@
-import {sections,sources} from './data.js?v=20260924-5';
+import {sections,sources} from './data.js?v=20260924-6';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const key='soma-inside-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')||{};}catch{}
@@ -34,7 +34,7 @@ function syncPlanes(){
  const card=document.querySelector('.planes3d-card');
  const fallback=card?.querySelector('[data-fallback]');
  if(fallback)fallback.onclick=()=>{state.paperPlanes=true;render();};
- if(card)import('./planes3d.js?v=20260924-5').then(m=>{if(card.isConnected)m.mountPlanes(card).catch(()=>{if(card.isConnected){state.paperPlanes=true;render();}});}).catch(()=>{if(card.isConnected){state.paperPlanes=true;render();}});
+ if(card)import('./planes3d.js?v=20260924-6').then(m=>{if(card.isConnected)m.mountPlanes(card).catch(()=>{if(card.isConnected){state.paperPlanes=true;render();}});}).catch(()=>{if(card.isConnected){state.paperPlanes=true;render();}});
  if(state.paperPlanes&&document.querySelector('[data-view="planes"]')){const b=document.createElement('button');b.textContent='Return to interactive 3D';b.onclick=()=>{state.paperPlanes=false;render();};document.querySelector('[data-view="planes"] .panel-title').append(b);}
 }
 function textbookDiagram(v,{quiz=false,target=-1,locate=false,reveal=false}={}){
