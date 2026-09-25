@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import {modules} from '../dist/chapter3/content.js';
 import {diagrams,references} from '../dist/chapter3/diagrams.js';
-import {buildBank,createSession,grade,score} from '../dist/chapter3/engine.js';
+import {comparisons} from '../dist/chapter3/comparisons.js';
+import {buildBank,createSession,grade,score,practicePool} from '../dist/chapter3/engine.js';
 const bank=buildBank(modules,diagrams);
 test('Chapter 3 covers six source sections with substantive lessons and applied questions',()=>{
  assert.deepEqual(modules.map(m=>m.section),['3.1','3.2','3.3','3.4','3.5','3.6']);
@@ -30,7 +31,7 @@ test('Typed recall accepts common abbreviations and equivalent anatomy names',()
  assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Cell membrane'),'plasma membrane'));
  assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Rough ER'),'rough endoplasmic reticulum'));
 });
-function harness(){const nodes=new Map(),document={querySelector(s){if(!nodes.has(s))nodes.set(s,{innerHTML:'',value:'',checked:false,addEventListener(){},focus(){}});return nodes.get(s);},querySelectorAll(){return []}};const c=vm.createContext({modules,diagrams,references,buildBank,createSession,grade,score,document,localStorage:{getItem(){return '{}'},setItem(){}},confirm:()=>true});let code=fs.readFileSync(new URL('../dist/chapter3/studio.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');vm.runInContext(code,c);return s=>vm.runInContext(s,c);}
+function harness(){const nodes=new Map(),document={querySelector(s){if(!nodes.has(s))nodes.set(s,{innerHTML:'',value:'',checked:false,addEventListener(){},focus(){}});return nodes.get(s);},querySelectorAll(){return []}};const c=vm.createContext({modules,diagrams,references,comparisons,buildBank,createSession,grade,score,practicePool,document,localStorage:{getItem(){return '{}'},setItem(){}},confirm:()=>true});let code=fs.readFileSync(new URL('../dist/chapter3/studio.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');vm.runInContext(code,c);return s=>vm.runInContext(s,c);}
 test('Location quizzes conceal selection, label names and premature exam feedback',()=>{
  const run=harness();run("start(false,[bank.find(q=>q.type==='locate')])");let html=run('quiz()');assert(!html.includes('diagram-pin active'));assert(!html.includes('diagram-key'));assert.equal((html.match(/data-target=/g)||[]).length,diagrams.membrane[0].targets.length);
  run('state.session.exam=true;submit(state.session.questions[0].answer)');html=run('quiz()');assert(html.includes('Answer recorded.'));assert(!html.includes('Correct.'));assert(!html.includes('diagram-pin active'));
@@ -57,4 +58,17 @@ test('Common biological singulars and RNA full names grade without accepting bla
 test('Transcription schematic uses thymine in DNA and indicates strand orientation',()=>{
  const svg=diagrams.protein.find(d=>d.id==='transcription-splicing').svg;
  assert(svg.includes('T A C'));assert(!svg.includes('U A C'));assert(svg.includes('A U G'));assert(svg.includes('5′'));assert(svg.includes('3′'));
+});
+test('Focused practice separates missed, assisted, untried and independently correct questions',()=>{
+ const qs=bank.filter(q=>q.module==='membrane').slice(0,4),stats={
+  [qs[0].id]:{lastCorrect:true,assisted:false},[qs[1].id]:{lastCorrect:false,assisted:false},[qs[2].id]:{lastCorrect:true,assisted:true}
+ };
+ assert.deepEqual(practicePool(qs,{focus:'revisit',stats}).map(q=>q.id),[qs[1].id,qs[2].id]);
+ assert.deepEqual(practicePool(qs,{focus:'untried',stats}).map(q=>q.id),[qs[3].id]);
+ assert.equal(createSession(qs,{focus:'revisit',stats,count:12}).length,2);
+ assert.equal(createSession(qs,{exam:true,focus:'revisit',stats,count:12}).length,4);
+ assert.equal(practicePool(qs,{focus:'revisit',stats:{}}).length,0);
+});
+test('Each module provides a comparison with reasoning hidden until requested',()=>{
+ const run=harness();for(const m of modules){assert.equal(comparisons[m.id].items.length,3);run(`state.module='${m.id}';state.compareReveal=false`);assert(!run('compareView()').includes('compare-answer'));run('state.compareReveal=true');assert(run('compareView()').includes('compare-answer'));}
 });

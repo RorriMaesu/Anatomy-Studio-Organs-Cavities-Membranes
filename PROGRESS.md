@@ -1,6 +1,6 @@
 # Anatomy Studio — saved progress
 
-Updated September 23, 2026. The original ZIP preserves the earlier checkpoint; this working repository has since been published and improved.
+Updated September 25, 2026. The original ZIP preserves the earlier checkpoint; this working repository has since been published and improved.
 
 Live studio: https://rorrimaesu.github.io/Anatomy-Studio-Organs-Cavities-Membranes/
 
@@ -66,7 +66,7 @@ The atlas covers major introductory structures, not every named organ or membran
 
 - Stage 1 (`bcf0935`): separate chapter page, six-module map, development plan and link from the original atlas. Published successfully.
 - Stage 2 (`d90feca`): 53 lessons, 10 schematic diagrams/78 targets, 10 textbook figures, 152 vocabulary entries and recall cards. Published successfully.
-- Stage 3: six interactive labs, separate 404-question bank, balanced chapter exams, assisted scoring, answer review and retry, common typed-answer aliases, and persistent chapter-only scores. Validated before publication.
+- Stage 3 (`0362a68`, published): six interactive labs, separate 404-question bank, balanced chapter exams, assisted scoring, answer review and retry, common typed-answer aliases, and persistent chapter-only scores. Validated before publication.
 - Browser checks: diagram alignment, original image loading, all six labs, full practice and 30-question exam walkthroughs, compact desktop and mobile layouts. Unit tests cover model biology, lab actions, question-bank coverage, grading and quiz concealment.
 
 ## Review phase 1 — September 25, 2026
@@ -76,3 +76,12 @@ The atlas covers major introductory structures, not every named organ or membran
 - Unified early-ending skip records with regular answer history; prevented duplicate records.
 - Added common singular/plural and RNA-name aliases, preserved keyboard focus on repeated controls, and added unfinished-session navigation warnings.
 - 35 automated tests pass, including new regression cases. Corrected diagram visually verified locally.
+
+
+## Review phase 2 — September 25, 2026
+
+- Six Compare activities pair concise distinctions with revealable reasoning checks.
+- Focused practice can revisit saved misses/assisted answers or select untried questions; matching counts and empty-state guidance update immediately.
+- Diagram markers stay legible when disabled for quiz/review.
+- 37 automated checks pass. All six modules' updated panels fit at 1024×768; phone comparisons stack cleanly. A complete focused location session and empty retry state were verified.
+- See `source/chapter3/REVIEW.md` for findings, verification, and remaining scope limits.

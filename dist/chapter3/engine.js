@@ -14,8 +14,11 @@ export function buildBank(modules,diagrams){
  }
  return bank;
 }
-export function createSession(bank,{module=null,format='mixed',count=12,exam=false,random=Math.random}={}){
- const available=bank.filter(q=>(!module||q.module===module)&&(format==='mixed'||q.type===format));
+export function practicePool(bank,{module=null,format='mixed',focus='all',stats={}}={}){
+ return bank.filter(q=>(!module||q.module===module)&&(format==='mixed'||q.type===format)&&(focus==='untried'?!stats[q.id]:focus==='revisit'?!!stats[q.id]&&(!stats[q.id].lastCorrect||stats[q.id].assisted):true));
+}
+export function createSession(bank,{module=null,focus='all',stats={},format='mixed',count=12,exam=false,random=Math.random}={}){
+ const available=practicePool(bank,{module,format,focus:exam?'all':focus,stats});
  let pool;
  if(exam){const ids=[...new Set(available.map(q=>q.module))],groups=shuffled(ids,random).map(id=>shuffled(available.filter(q=>q.module===id),random));pool=[];while(groups.some(g=>g.length)&&(count==='all'||pool.length<count))for(const g of groups)if(g.length&&(count==='all'||pool.length<count))pool.push(g.pop());pool=shuffled(pool,random);}
  else pool=shuffled(available,random).slice(0,count==='all'?available.length:count);
