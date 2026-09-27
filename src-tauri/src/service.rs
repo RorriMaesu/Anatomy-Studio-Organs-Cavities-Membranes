@@ -113,9 +113,9 @@ pub async fn chat(rt:State<'_,Runtime>,model:String,messages:Vec<Value>,format:O
     if info.get("remote_model").is_some()||info.get("remote_host").is_some(){return Err("Remote models cannot be used in local-only mode.".into());}
     let mut body=json!({"model":model,"messages":messages,"stream":false,"think":false,"keep_alive":"5m","options":{"num_ctx":8192,"num_predict":2200,"temperature":0.25}});
     if let Some(f)=format {body["format"]=f;}
-    let request=c.post(format!("{BASE}/api/chat")).json(&body).send();tokio::pin!(request);
-    let response=loop {if rt.cancel.load(Ordering::SeqCst){return Err("Request cancelled.".into());}tokio::select!{r=&mut request=>break r.map_err(|e|e.to_string())?,_=tokio::time::sleep(Duration::from_millis(150))=>{}}};
-    response_json(response).await
+    if !info["capabilities"].as_array().map(|a|a.iter().any(|v|v=="thinking")).unwrap_or(false){body.as_object_mut().unwrap().remove("think");}
+    let request=async {response_json(c.post(format!("{BASE}/api/chat")).json(&body).send().await.map_err(|e|e.to_string())?).await};tokio::pin!(request);
+    loop {if rt.cancel.load(Ordering::SeqCst){return Err("Request cancelled.".into());}tokio::select!{r=&mut request=>return r,_=tokio::time::sleep(Duration::from_millis(150))=>{}}}
 }
 #[tauri::command]
 pub fn open_official(kind:String)->Result<(),String> {let url=match kind.as_str(){"ollama"=>"https://ollama.com/download/windows","releases"=>"https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases",_=>return Err("Unknown link".into())}; let mut c=Command::new("explorer.exe");hidden(&mut c);c.arg(url).spawn().map_err(|e|e.to_string())?;Ok(())}

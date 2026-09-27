@@ -92,3 +92,10 @@ The atlas covers major introductory structures, not every named organ or membran
 - Added native folder/executable selection, official installer guidance with signature verification, model downloads with progress/cancellation, and verified library copying that preserves originals.
 - Added a public Local AI entry page linked from both study studios. Native controls are disabled on the website; desktop distribution follows in phase 3.
 - 40 JavaScript checks and 2 native checks pass. End-to-end desktop verification is pending the completed learning interface.
+
+## Local AI phase 2 — September 27, 2026
+
+- Added a source-grounded Chapter 3 Socratic tutor with hints, direct explanations, and the existing verified diagrams.
+- Added structured quiz generation, frozen answer keys/rubrics, deterministic choice grading, criterion-based written-answer feedback, and review flags for unsupported evidence.
+- Added local conversation/quiz history, reassessment history, and JSON backup import/export.
+- 44 JavaScript checks pass, covering source validation, malformed quizzes, retrieval, grading evidence and legacy studios. Native/live-model verification follows before the desktop release.
