@@ -85,3 +85,10 @@ The atlas covers major introductory structures, not every named organ or membran
 - Diagram markers stay legible when disabled for quiz/review.
 - 37 automated checks pass. All six modules' updated panels fit at 1024×768; phone comparisons stack cleanly. A complete focused location session and empty retry state were verified.
 - See `source/chapter3/REVIEW.md` for findings, verification, and remaining scope limits.
+
+## Local AI phase 1 — September 27, 2026
+
+- Added a Windows Tauri desktop shell, hardware inventory, distinct installed/running/ready states, and a hidden local-only Ollama session launcher.
+- Added native folder/executable selection, official installer guidance with signature verification, model downloads with progress/cancellation, and verified library copying that preserves originals.
+- Added a public Local AI entry page linked from both study studios. Native controls are disabled on the website; desktop distribution follows in phase 3.
+- 40 JavaScript checks and 2 native checks pass. End-to-end desktop verification is pending the completed learning interface.

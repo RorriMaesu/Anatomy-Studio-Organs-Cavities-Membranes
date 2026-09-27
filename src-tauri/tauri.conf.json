@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Soma Desktop",
+  "version": "0.1.0",
+  "identifier": "io.github.rorrimaesu.soma",
+  "build": { "frontendDist": "../dist" },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [{ "label": "main", "title": "Soma · Local learning studio", "url": "local-ai/index.html", "width": 1280, "height": 840, "minWidth": 800, "minHeight": 600 }],
+    "security": { "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src ipc: http://ipc.localhost 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'" }
+  },
+  "bundle": { "active": true, "targets": ["nsis"], "icon": ["icons/icon.ico"], "windows": { "nsis": { "installMode": "currentUser", "displayLanguageSelector": false } } }
+}
