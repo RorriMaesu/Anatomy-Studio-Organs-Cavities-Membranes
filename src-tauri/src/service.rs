@@ -578,7 +578,7 @@ pub async fn apply_update(
     Ok(())
 }
 #[tauri::command]
-pub fn open_studio(app: tauri::AppHandle, section: String) -> Result<(), String> {
+pub async fn open_studio(app: tauri::AppHandle, section: String) -> Result<(), String> {
     let path = match section.as_str() {
         "chapter3" => "chapter3/index.html",
         "atlas" => "index.html",

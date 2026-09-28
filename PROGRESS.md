@@ -129,3 +129,9 @@ Phase 6 — Desktop 0.2.0 published (2026-09-28)
 - Website now uses a stable direct installer link; update manifest points to the exact versioned asset.
 - Live readiness check passed with the existing qwen3:8b model; reopening the release build automatically reconnects and opens Study home.
 - Tutor controls and textbook entry points visually reviewed at desktop size.
+
+Release correction — 0.2.1 (2026-09-28)
+- Final native UI testing exposed a blank secondary study window caused by creating a Windows WebView inside a synchronous command.
+- Moved study-window creation into an asynchronous Tauri command to avoid blocking the Windows message loop.
+- The 0.2.0 release is marked prerelease; 0.2.1 supersedes it after a live secondary-window verification.
+- Desktop update check successfully read the published feed; external textbook navigation opened OpenStax 3.1 in the system browser.
