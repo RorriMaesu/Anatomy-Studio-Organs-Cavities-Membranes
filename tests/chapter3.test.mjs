@@ -73,3 +73,5 @@ test('Focused practice separates missed, assisted, untried and independently cor
 test('Each module provides a comparison with reasoning hidden until requested',()=>{
  const run=harness();for(const m of modules){assert.equal(comparisons[m.id].items.length,3);run(`state.module='${m.id}';state.compareReveal=false`);assert(!run('compareView()').includes('compare-answer'));run('state.compareReveal=true');assert(run('compareView()').includes('compare-answer'));}
 });
+
+test('section activities group all existing learning tools without removing them',()=>{const run=harness();run("state.page='module';state.module='membrane'");let html=run('moduleView()');for(const label of ['Learn','Explore','Practice','Review','Read textbook'])assert(html.includes(label));run("state.tab='lab'");html=run('moduleView()');assert(html.includes('lab-container'));assert(html.includes('Textbook figures'));run("state.tab='review'");assert(run('moduleView()').includes('No missed or assisted'));});

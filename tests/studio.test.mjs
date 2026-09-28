@@ -104,3 +104,8 @@ test('Chapter 3 is a full atlas section with graded recall and textbook links',(
  const h=harness();h.run("state.section='cells';state.factReveal=true");const html=h.run('study()');assert(html.includes('chapter3/'));assert(html.includes(s.facts[0].a));assert(html.includes(s.facts[0].sourceUrl));
  h.node('#format').value='choice';h.node('#scope').value='section';h.node('#practice-length').value='10';h.run('start()');assert.equal(h.run('state.session.questions.length'),10);h.run('answer(state.session.questions[0].a)');assert.equal(h.run('state.session.records[0].correct'),true);
 });
+
+test('chapter exams and custom chapter choices exclude other chapters',()=>{const h=harness();h.node('#exam-length').value='40';for(const c of [1,2]){h.run(`state.courseChapter=${c};start(true)`);assert(h.run(`state.session.questions.every(q=>sections.find(s=>s.id===q.section).chapter===${c})`));}h.run('state.courseChapter=null;state.examChapters=[2];start(true)');assert(h.run("state.session.questions.every(q=>q.section==='chemistry')"));});
+test('Chapter 3 concepts share canonical scoring identifiers',()=>{const s=sections.find(s=>s.id==='cells');assert(s.facts.every(f=>f.canonicalId));assert.equal(new Set(s.facts.map(f=>f.canonicalId)).size,96);});
+
+test('textbook sections filter essentials without changing question identifiers',()=>{const h=harness();h.run("state.section='chemistry';state.bookSection='2.4'");const ids=JSON.parse(h.run("JSON.stringify(bank(section(),'choice').map(q=>q.id))"));assert.equal(ids.length,6);assert(ids.includes('chemistry/concept/11'));assert(!ids.includes('chemistry/concept/0'));h.run("state.bookSection='2.1'");assert.equal(h.run("bank(section(),'choice').length"),7);});
