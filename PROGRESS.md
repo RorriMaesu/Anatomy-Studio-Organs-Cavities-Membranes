@@ -108,3 +108,11 @@ The atlas covers major introductory structures, not every named organ or membran
 - 46 JavaScript checks and 2 Rust checks pass. Live local-model checks cover valid written-question generation and correct/partial/wrong/injected/negated answers.
 - Built the Windows x64 NSIS installer. Installer and checksum will be distributed through GitHub Releases; models and local data are not published.
 - Documented setup, data storage, model migration, source grounding and verification limits in source/local-ai/README.md.
+
+Phase 4 — Guided setup and student navigation (2026-09-27)
+- Replaced the technical dashboard with a guided setup and study home.
+- Website uses a direct Windows installer download and browser-study alternative.
+- Tutor starters, simpler quiz defaults, and prominent topic-specific OpenStax links.
+- Existing model reuse, hardware suggestions, optional storage settings, and actionable errors.
+- Native installation automation follows in the next desktop release; published installer remains 0.1.0 until that release is ready.
+- Validation: all 46 existing JavaScript checks pass.

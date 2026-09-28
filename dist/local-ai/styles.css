@@ -540,3 +540,34 @@ input[type="file"] {
     border-radius: 10px;
   }
 }
+/* Guided setup and a small set of clear study actions. */
+.book-grid,.study-actions {display:grid;gap:10px;}
+.book-link {display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;}
+.book-link span {font-size:12px;color:var(--muted);}
+.book-link:hover {background:#203c43;}
+.study-actions b,.study-actions span {display:block;text-align:left;}
+.study-actions span {font-size:13px;color:var(--muted);margin-top:5px;line-height:1.4;}
+.study-actions button,.study-actions .button {padding:16px;}
+.connection {display:flex;justify-content:space-between;align-items:center;gap:12px;margin:18px 0;}
+.connection b {color:var(--mint);}
+.steps {padding-left:24px;display:grid;gap:20px;}
+.steps b,.steps span {display:block;line-height:1.6;}
+.steps span {color:var(--muted);}
+.setup-layout {display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,.8fr);gap:20px;height:100%;min-height:0;}
+.setup-track {display:flex;list-style:none;padding:0;gap:8px;margin:0 0 22px;}
+.setup-track li {flex:1;border-bottom:3px solid var(--line);padding:10px 0;color:var(--muted);font-size:12px;}
+.setup-track .done {color:var(--mint);border-color:var(--mint);}
+.wizard {overflow:auto;}
+.model-download small {display:block;margin-top:12px;}
+.textbook-card {border:1px solid #447564;border-radius:12px;background:#112d2a;padding:14px;margin:16px 0;}
+.textbook-card p {margin:4px 0;font-size:12px;}
+.task-banner {padding:12px 16px;border:1px solid #567a8c;background:#172f3c;border-radius:12px;margin-bottom:10px;max-height:160px;overflow:auto;}
+.task-banner p {margin:4px 0;}
+.task-banner progress {height:8px;}
+#panel:has(.task-banner) {display:flex;flex-direction:column;}
+#panel:has(.task-banner)>.grid,#panel:has(.task-banner)>.setup-layout {flex:1;min-height:0;height:auto;}
+.task-banner {flex:none;}
+body[data-tool="setup"] .intro {display:none;}
+body:has(#web-note:not([hidden])) .intro {display:none;}
+@media(min-width:900px){.setup-layout>.card {overflow:auto;min-height:0;}.book-link {padding:10px;}.study-actions button,.study-actions .button {padding:12px;} .setup-help {align-self:start;}.quiz-options {margin-top:14px;}}
+@media(max-width:899px){.setup-layout {grid-template-columns:1fr;}.setup-help {display:none;}.connection {flex-wrap:wrap;}}

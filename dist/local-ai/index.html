@@ -30,27 +30,29 @@
       <div id="web-note" hidden class="notice">
         <b>Local AI runs in Soma Desktop for Windows.</b>
         <p>
-          The website keeps the atlas and activities available. Download the
-          desktop edition to detect hardware, launch Ollama, and use your local
-          models.
+          Ask questions, practice explaining, and get feedback on your answers.
+          Install Soma once, then follow the setup guide. Your AI conversations
+          run on your computer. No AI subscription is needed.
         </p>
         <a
-          class="button"
-          href="https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases/latest"
-          >Get Soma Desktop ↗</a
+          class="button primary" id="desktop-download"
+          href="https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases/download/desktop-v0.1.0/Soma.Desktop_0.1.0_x64-setup.exe"
+          >Download Soma for Windows</a
         >
         <a
-          href="https://ollama.com/download/windows"
-          target="_blank"
-          rel="noopener"
-          >Get Ollama ↗</a
+          href="../chapter3/"
+          >Keep studying in your browser →</a
         >
+        <p><small>Windows 10 22H2 / Windows 11 · Intel or AMD 64-bit · Preview release.
+          The app is about 19 MB. First-time AI setup needs additional downloads
+          of several GB. The current installer is not code-signed.</small></p>
       </div>
       <nav class="tabs" aria-label="Companion tools">
-        <button data-tab="setup" class="active">01 · Local setup</button
-        ><button data-tab="tutor">02 · Socratic tutor</button
-        ><button data-tab="quiz">03 · Quiz workshop</button
+        <button data-tab="home">Study home</button
+        ><button data-tab="tutor">Ask your tutor</button
+        ><button data-tab="quiz">Practice a quiz</button
         ><button data-tab="history">Saved work</button>
+        <button data-tab="setup">AI settings</button>
       </nav>
       <p id="message" role="status" aria-live="polite"></p>
       <section id="panel"></section>
