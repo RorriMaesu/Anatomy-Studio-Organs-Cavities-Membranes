@@ -145,3 +145,11 @@ Four-step guide with Edge, Chrome, Firefox and Windows guidance, source checks, 
 ## 2026-09-28 · Chapter 3 in the main atlas
 Added Chapter 3 essentials as section 09, sharing all 96 reviewed Cell Studio questions across six textbook topics. Recall cards link directly to their OpenStax section; practice grades answers; full exams balance all nine sections. Existing Cell Studio diagrams remain one click away. All 51 JavaScript checks pass; browser preview confirms the section fits the desktop viewport. Website changes do not replace the previously packaged desktop installer.
 
+
+
+## 2026-09-28 · Course organization and visual redesign
+- Phase 1: course home, animated chapter library, chapter registry and numbered overview pages; atlas retained as atlas.html.
+- Phase 2: shared chapter navigation and Chapter 3 Learn/Explore/Practice/Review groups; contextual tutor links and exact textbook sections.
+- Phase 3: focused Chapter 1–2 essentials, scoped/custom exams, latest-outcome review, canonical Chapter 3 concept recording, route/history and saved quiz drafts, course backup/restore.
+- Validation: 55 automated checks passed; browser UI confirmed Chapter 3 and 3D atlas layouts, and a fresh page restored the same typed question and draft. Mobile section layout measured with no horizontal overflow at 390 px. Existing desktop installer is not replaced by website deployments.
+- Preserved partial-coverage labels. No new textbook chapters or AI corpora are claimed.

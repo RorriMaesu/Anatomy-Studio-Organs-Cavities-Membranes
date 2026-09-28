@@ -6,21 +6,19 @@ An interactive companion to OpenStax *Anatomy and Physiology 2e*, inspired by [S
 
 ## Study and practice
 
-- Eight sections, 22 diagrams, 92 labeling targets, and 95 concept questions.
-- Major organs and all eleven organ systems; cavities; serous membranes and optional meninges; abdominal regions and quadrants; anatomical directions and planes.
-- Chapter 1 foundations and Chapter 2 chemistry review.
-- Show/hide labels, exact anatomical endpoints, fitted detail views, explanations, mnemonics, and common mistakes.
-- Desktop diagrams fit the available screen; teaching tabs and Previous/Next recall and review cards replace long scrolling pages.
-- Enlarged testis/epididymis and membrane views, individual small-organ crops, and selectable panels for densely labeled reference images.
-- Numbered labels reuse the textbook's printed callout lines. Close-ups anchor numbers to the visible portions of those same lines; no duplicate connectors are drawn over textbook diagrams.
-- Plane markers sit on distinct parts of the cutting surfaces; selecting a plane traces its outline.
-- Multiple-choice questions, typed labels, and diagram-location practice with immediate feedback.
-- Balanced 40- or 80-question exams, or the complete bank: 279 questions including optional extensions. Identification and location questions test the same targets in different ways.
-- Answer review includes the original diagram and correct anatomical location. Retry missed and assisted questions.
+The course home organizes available content by textbook chapter. Each chapter has an overview, numbered sections, contextual textbook links, and a consistent Learn / Explore / Practice / Review pattern. Coverage is labeled: Chapters 1–2 have focused essentials and the anatomical atlas; Chapter 3 has lessons, diagrams, comparisons, process labs, flashcards and reviewed quizzes.
 
-Progress and preferences stay in the current browser. There is no account or synchronization. An unfinished quiz is not restored after reloading.
+- Animated orbital artwork, chapter cards, transitions, an Effects switch, and reduced-motion support.
+- Chapter-specific exams and custom chapter selection; Chapter 3 custom-exam coverage is concepts, while its dedicated exam includes diagrams and terms.
+- Stable section/activity links, exact lesson and diagram resume locations, and unfinished reviewed quiz drafts.
+- Reviewed progress and backup/restore across the atlas, Chapter 3 and AI history. Legacy scores are preserved without pretending old totals establish a latest correct answer.
+- Chapter 3 concept answers in custom exams also update their canonical Cell Studio records.
+- The original diagram labeling, original printed callouts, body-plane 3D model and six process labs remain available.
+- Optional local AI currently supports Chapter 3. AI-generated feedback and practice remain separate from reviewed assessments.
 
-This is an introductory atlas of major structures, not an exhaustive catalog of every named human organ or membrane. Chapter 1 provides the anatomical foundation; Chapter 2 covers chemistry. Additional membrane topics are marked as extensions and excluded from standard exams by default. Later-chapter pleural and peritoneal illustrations clarify membrane relationships introduced in Chapter 1.
+Progress stays on the current browser/device. Desktop and browser storage do not automatically synchronize. The website uses the current course design; installed desktop releases contain their packaged frontend and need a separate release to gain website changes.
+
+See [the experience plan](source/STUDENT-EXPERIENCE-PLAN.md). Public `/dist/chapter3/` links lead to the Chapter 3 overview. The atlas workspace remains at `/dist/atlas.html`.
 
 ## Run locally
 
