@@ -137,3 +137,7 @@ Release correction — 0.2.1 (2026-09-28)
 - Desktop update check successfully read the published feed; external textbook navigation opened OpenStax 3.1 in the system browser.
 
 Desktop 0.2.1: packaged secondary-window test passed with the full chapter map visible. Installer, signature and checksum published; stable download and updater feed now select 0.2.1.
+
+
+## 2026-09-28 · Free installation guide
+Four-step guide with Edge, Chrome, Firefox and Windows guidance, source checks, a real supplied Edge screenshot, clearly labeled illustrations elsewhere, and an online-study alternative. No security settings changed. Fresh browser screenshots remain to be captured where available.
