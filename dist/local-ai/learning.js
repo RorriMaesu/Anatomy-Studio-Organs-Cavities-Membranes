@@ -26,6 +26,7 @@ let saved = readSaved(localStorage),
   tutorDraft = "",
   mode = "socratic",
   diagramIndex = 0;
+if(typeof location!=='undefined'){const requested=new URLSearchParams(location.search).get('topic');if(modules.some(m=>m.id===requested))topic=requested;}
 let context = null;
 const generator = {
   "quiz-count": "3",

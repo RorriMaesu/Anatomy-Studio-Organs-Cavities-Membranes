@@ -1,3 +1,4 @@
+import {chapters,textbook} from '../dist/shared/course.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -31,7 +32,7 @@ test('Typed recall accepts common abbreviations and equivalent anatomy names',()
  assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Cell membrane'),'plasma membrane'));
  assert(grade(bank.find(q=>q.type==='typed'&&q.answer==='Rough ER'),'rough endoplasmic reticulum'));
 });
-function harness(){const nodes=new Map(),document={querySelector(s){if(!nodes.has(s))nodes.set(s,{innerHTML:'',value:'',checked:false,addEventListener(){},focus(){}});return nodes.get(s);},querySelectorAll(){return []}};const c=vm.createContext({modules,diagrams,references,comparisons,buildBank,createSession,grade,score,practicePool,document,localStorage:{getItem(){return '{}'},setItem(){}},confirm:()=>true});let code=fs.readFileSync(new URL('../dist/chapter3/studio.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');vm.runInContext(code,c);return s=>vm.runInContext(s,c);}
+function harness(){const nodes=new Map(),document={querySelector(s){if(!nodes.has(s))nodes.set(s,{innerHTML:'',value:'',checked:false,addEventListener(){},focus(){}});return nodes.get(s);},querySelectorAll(){return []}};const c=vm.createContext({chapters,textbook,modules,diagrams,references,comparisons,buildBank,createSession,grade,score,practicePool,document,localStorage:{getItem(){return '{}'},setItem(){}},confirm:()=>true});let code=fs.readFileSync(new URL('../dist/chapter3/studio.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');vm.runInContext(code,c);return s=>vm.runInContext(s,c);}
 test('Location quizzes conceal selection, label names and premature exam feedback',()=>{
  const run=harness();run("start(false,[bank.find(q=>q.type==='locate')])");let html=run('quiz()');assert(!html.includes('diagram-pin active'));assert(!html.includes('diagram-key'));assert.equal((html.match(/data-target=/g)||[]).length,diagrams.membrane[0].targets.length);
  run('state.session.exam=true;submit(state.session.questions[0].answer)');html=run('quiz()');assert(html.includes('Answer recorded.'));assert(!html.includes('Correct.'));assert(!html.includes('diagram-pin active'));
