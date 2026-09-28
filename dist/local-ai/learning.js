@@ -56,22 +56,31 @@ function modelSelect() {
   return `<label for="learning-model">Tutor model</label><select id="learning-model" ${context.busy || !context.installed.length ? "disabled" : ""}><option value="">Choose a model in AI settings</option>${context.installed.map((m) => `<option ${m.name === context.chosen ? "selected" : ""} value="${e(m.name)}">${e(m.name)}</option>`).join("")}</select>${!context.ready ? '<p class="muted">Your tutor needs a quick setup before it can answer.</p><button data-tab="setup" class="primary">Set up my tutor</button>' : ""}`;
 }
 function textbook(module = topic) {
-  const m = modules.find(m => m.id === module);
-  const ref = corpus.find(r => r.module === module);
-  return ref ? `<div class="textbook-card"><p class="eyebrow">YOUR TEXTBOOK · OPENSTAX</p><a href="${e(ref.url)}" target="_blank" rel="noopener">Read section ${e(m.section)} · ${e(m.title)} ↗</a><p class="muted">Read the original explanation, then return here to practice. Opens online in your browser.</p></div>` : '';
+  const m = modules.find((m) => m.id === module);
+  const ref = corpus.find((r) => r.module === module);
+  return ref
+    ? `<div class="textbook-card"><p class="eyebrow">YOUR TEXTBOOK · OPENSTAX</p><a href="${e(ref.url)}" target="_blank" rel="noopener">Read section ${e(m.section)} · ${e(m.title)} ↗</a><p class="muted">Read the original explanation, then return here to practice. Opens online in your browser.</p></div>`
+    : "";
 }
 function links(ids) {
-  const refs = (ids || []).map(id => corpus.find(r => r.id === id)).filter(Boolean);
-  const unique = [...new Map(refs.map(r => [r.url, r])).values()];
-  return unique.map(r => `<a class="source" href="${e(r.url)}" target="_blank" rel="noopener">Read this in the textbook · OpenStax ${e(r.section)} ↗</a>`).join('');
+  const refs = (ids || [])
+    .map((id) => corpus.find((r) => r.id === id))
+    .filter(Boolean);
+  const unique = [...new Map(refs.map((r) => [r.url, r])).values()];
+  return unique
+    .map(
+      (r) =>
+        `<a class="source" href="${e(r.url)}" target="_blank" rel="noopener">Read this in the textbook · OpenStax ${e(r.section)} ↗</a>`,
+    )
+    .join("");
 }
 const starters = {
-  membrane: 'Why does a cell shrink in a hypertonic solution?',
-  organelles: 'How do the rough ER and Golgi apparatus work together?',
-  nucleus: 'Why must DNA be copied before a cell divides?',
-  protein: 'How does a DNA instruction become a protein?',
-  division: 'How are mitosis and cytokinesis different?',
-  differentiation: 'How can cells with the same DNA have different jobs?',
+  membrane: "Why does a cell shrink in a hypertonic solution?",
+  organelles: "How do the rough ER and Golgi apparatus work together?",
+  nucleus: "Why must DNA be copied before a cell divides?",
+  protein: "How does a DNA instruction become a protein?",
+  division: "How are mitosis and cytokinesis different?",
+  differentiation: "How can cells with the same DNA have different jobs?",
 };
 function diagram() {
   const d = diagrams[topic]?.[diagramIndex] || diagrams[topic]?.[0];
@@ -79,7 +88,7 @@ function diagram() {
 }
 function tutor() {
   const messages = conversation?.messages || [];
-  return `<div class="grid"><article class="card"><p class="eyebrow">THINK OUT LOUD</p><h2>Let’s follow your reasoning.</h2><div class="chatlog" role="log" aria-label="Tutor conversation">${messages.length ? messages.map((m) => `<div class="bubble ${m.role === "user" ? "user" : ""}"><strong>${m.role === "user" ? "You" : "Soma · " + e(m.model || conversation.model)}</strong>${e(m.content)}${links(m.sourceIds)}</div>`).join("") : `<p class="muted">We’ll work through one idea at a time. Start with your own question or try this:</p><button id="starter-question" ${context.busy?'disabled':''}>${e(starters[topic])}</button><p class="muted">Ask your tutor guides your reasoning. Give me a hint offers a small nudge. Explain directly gives you the explanation.</p>`}</div><label for="tutor-input">Your question or explanation</label><textarea id="tutor-input" maxlength="3000" placeholder="Tell me what you understand so far…" ${context.busy ? "disabled" : ""}>${e(tutorDraft)}</textarea><div class="row"><button id="send-tutor" class="primary" ${!canAsk() ? "disabled" : ""}>Ask the tutor</button><button id="hint-tutor" ${!canAsk() ? "disabled" : ""}>Give me a hint</button><button id="explain-tutor" ${!canAsk() ? "disabled" : ""}>Explain directly</button>${context.busy ? '<button id="cancel">Cancel</button>' : ""}</div></article><aside class="card">${topicSelect()}${textbook()}${!context.ready?'<p class="muted">Set up your tutor to start asking questions.</p><button data-tab="setup" class="primary">Set up my tutor</button>':""}<details><summary>Tutor settings</summary>${modelSelect()}</details><div class="row"><button id="new-chat" ${context.busy ? "disabled" : ""}>New conversation</button></div><p class="muted">The tutor uses our reviewed Chapter 3 lessons. Check important explanations against the textbook; AI can make mistakes.</p>${diagram()}</aside></div>`;
+  return `<div class="grid"><article class="card"><p class="eyebrow">THINK OUT LOUD</p><h2>Let’s follow your reasoning.</h2><div class="chatlog" role="log" aria-label="Tutor conversation">${messages.length ? messages.map((m) => `<div class="bubble ${m.role === "user" ? "user" : ""}"><strong>${m.role === "user" ? "You" : "Soma · " + e(m.model || conversation.model)}</strong>${e(m.content)}${links(m.sourceIds)}</div>`).join("") : `<p class="muted">We’ll work through one idea at a time. Start with your own question or try this:</p><button id="starter-question" ${context.busy ? "disabled" : ""}>${e(starters[topic])}</button><p class="muted">Ask your tutor guides your reasoning. Give me a hint offers a small nudge. Explain directly gives you the explanation.</p>`}</div><label for="tutor-input">Your question or explanation</label><textarea id="tutor-input" maxlength="3000" placeholder="Tell me what you understand so far…" ${context.busy ? "disabled" : ""}>${e(tutorDraft)}</textarea><div class="row"><button id="send-tutor" class="primary" ${!canAsk() ? "disabled" : ""}>Ask the tutor</button><button id="hint-tutor" ${!canAsk() ? "disabled" : ""}>Give me a hint</button><button id="explain-tutor" ${!canAsk() ? "disabled" : ""}>Explain directly</button>${context.busy ? '<button id="cancel">Cancel</button>' : ""}</div></article><aside class="card">${topicSelect()}${textbook()}${!context.ready ? '<p class="muted">Set up your tutor to start asking questions.</p><button data-tab="setup" class="primary">Set up my tutor</button>' : ""}<details><summary>Tutor settings</summary>${modelSelect()}</details><div class="row"><button id="new-chat" ${context.busy ? "disabled" : ""}>New conversation</button></div><p class="muted">The tutor uses our reviewed Chapter 3 lessons. Check important explanations against the textbook; AI can make mistakes.</p>${diagram()}</aside></div>`;
 }
 function canAsk() {
   return context.ready && context.chosen && !context.busy;
@@ -244,10 +253,10 @@ async function grade(reassess = false) {
 }
 export async function learningClick(b) {
   const id = b.id;
-  if (id === 'starter-question') {
+  if (id === "starter-question") {
     tutorDraft = starters[topic];
     context.render();
-    context.panel.querySelector('#tutor-input')?.focus?.();
+    context.panel.querySelector("#tutor-input")?.focus?.();
     return true;
   }
   if (b.dataset.openQuiz) {
