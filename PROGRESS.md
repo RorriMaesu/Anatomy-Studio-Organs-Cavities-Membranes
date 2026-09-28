@@ -123,3 +123,9 @@ Phase 5 — Native guided installation and update delivery (2026-09-27)
 - Separate study windows keep setup operations alive, and native textbook links open in the user's browser.
 - Signed updater support with an explicit Update and restart action. Windows Authenticode signing remains unconfigured.
 - 50 JavaScript and 3 Rust checks passed. Existing-user desktop flow visually checked; clean-machine installation and future-version update require additional coverage.
+
+Phase 6 — Desktop 0.2.0 published (2026-09-28)
+- Published Soma-Setup.exe, updater signature, and SHA-256 checksum in desktop-v0.2.0.
+- Website now uses a stable direct installer link; update manifest points to the exact versioned asset.
+- Live readiness check passed with the existing qwen3:8b model; reopening the release build automatically reconnects and opens Study home.
+- Tutor controls and textbook entry points visually reviewed at desktop size.
