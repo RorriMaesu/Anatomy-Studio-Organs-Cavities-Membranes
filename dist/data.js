@@ -1,3 +1,4 @@
+import {modules as cellModules} from './chapter3/content.js';
 import {systems} from './system-data.js';
 import {illustrations} from './system-geometry.js';
 const t=(name,x,y,teach,aliases=[])=>({name,x,y,teach,aliases});
@@ -216,3 +217,7 @@ torso.targets[8].pin=[78,65];
 torso.targets[10].pin=[80,75];
 
 sources.push({title:'Interactive 3D human and body planes',url:'https://download.blender.org/demo/asset-bundles/human-base-meshes/',text:'Human Base Meshes by Blender Foundation, Blender Studio and the Blender community. CC0, per the bundle README. Neutral materials and four cutting surfaces authored in Blender 4.5.1 LTS. Rotate with mouse/touch or arrow keys; use Front, Side and Top to compare orientations. All planes shows the intersection; See through body reveals the surfaces inside. The editable Blender scene is included in the repository. Three.js 0.180.0 is bundled under the MIT license.'});
+
+// Share the reviewed Cell Studio bank so corrections stay consistent in both studios.
+const cellPages=['3-1-the-cell-membrane','3-2-the-cytoplasm-and-cellular-organelles','3-3-the-nucleus-and-dna-replication','3-4-protein-synthesis','3-5-cell-growth-and-division','3-6-cellular-differentiation'];
+sections.push({id:'cells',title:'Chapter 3 essentials',chapter:3,tag:'The cellular level',summary:'Connect membrane transport, organelles, DNA, protein synthesis, cell division and differentiation. Practice here, then explore interactive diagrams and process labs in Cell Studio.',memory:'Boundary → machinery → instructions → proteins → division → specialization. DNA is transcribed into RNA; ribosomes translate mRNA into protein.',trap:'DNA replication copies DNA before division. Transcription makes RNA; translation builds a polypeptide. Differentiation usually changes gene expression, not which genes a cell possesses.',views:[],facts:cellModules.flatMap((m,i)=>m.questions.map(q=>({q:q.prompt,a:q.options[q.answer],options:[...q.options],why:q.explanation,hint:`Think about ${m.title.toLowerCase()} in section ${m.section}.`,topic:m.title,sourceUrl:`https://openstax.org/books/anatomy-and-physiology-2e/pages/${cellPages[i]}`})))});

@@ -141,3 +141,7 @@ Desktop 0.2.1: packaged secondary-window test passed with the full chapter map v
 
 ## 2026-09-28 · Free installation guide
 Four-step guide with Edge, Chrome, Firefox and Windows guidance, source checks, a real supplied Edge screenshot, clearly labeled illustrations elsewhere, and an online-study alternative. No security settings changed. Fresh browser screenshots remain to be captured where available.
+
+## 2026-09-28 · Chapter 3 in the main atlas
+Added Chapter 3 essentials as section 09, sharing all 96 reviewed Cell Studio questions across six textbook topics. Recall cards link directly to their OpenStax section; practice grades answers; full exams balance all nine sections. Existing Cell Studio diagrams remain one click away. All 51 JavaScript checks pass; browser preview confirms the section fits the desktop viewport. Website changes do not replace the previously packaged desktop installer.
+
