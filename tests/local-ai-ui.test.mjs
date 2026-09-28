@@ -1,0 +1,36 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {validateBackup} from '../dist/local-ai/learning-engine.js';
+
+test('mixed-quiz UI creates both formats, freezes keys, grades and saves drafts',async()=>{
+ const values=new Map();
+ globalThis.localStorage={getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)};
+ const fields={'quiz-count':{value:'3'},'quiz-kind':{value:'mixed'},difficulty:{value:'foundational'},'quiz-focus':{value:''}};
+ globalThis.document={querySelector:selector=>fields[selector.slice(1)]||null};
+ const {renderLearning,learningClick,learningChange}=await import('../dist/local-ai/learning.js?ui-test');
+ const calls=[];
+ const ctx={panel:{innerHTML:'',querySelector:selector=>fields[selector.slice(1)]||null},tab:'quiz',busy:false,ready:true,chosen:'test-local',installed:[{name:'test-local',digest:'verified-test-digest'}],message(){},render(){renderLearning(ctx);},async work(fn){ctx.busy=true;ctx.render();try{await fn();}finally{ctx.busy=false;ctx.render();}},setTab(tab){ctx.tab=tab;ctx.render();},async invoke(command,args){assert.equal(command,'chat');calls.push(args);const props=args.format.properties;if(props.questions){const kind=props.questions.items.properties.kind.enum[0];const count=props.questions.minItems;const source=props.questions.items.properties.sourceIds.items.enum[0];return {message:{content:JSON.stringify({title:'Generated test quiz',questions:Array.from({length:count},(_,i)=>({kind,prompt:`Explain the ${kind} membrane concept number ${i+1}.`,options:kind==='choice'?['A','B','C','D']:[],answerIndex:kind==='choice'?1:-1,answer:kind==='choice'?'B':'Water leaves the cell.',rubric:['States the direction correctly.'],explanation:'A source-supported explanation.',sourceIds:[source]}))})}};}return {message:{content:JSON.stringify({criteria:[{index:0,earned:true,evidence:'Water leaves the cell.',reason:'Correct direction.'}],feedback:'Correct; water leaves.',followUp:'How does its volume change?',needsReview:false,sourceIds:props.sourceIds.items.enum.slice(0,1)})}};}};
+ ctx.render();await learningClick({id:'generate-quiz',dataset:{}});
+ const saved=JSON.parse(values.get('soma-local-ai-v1'));
+ assert.deepEqual(saved.quizzes[0].questions.map(q=>q.kind),['choice','choice','short']);
+ assert.equal(calls.length,2);
+ const key=JSON.stringify(saved.quizzes[0].questions);
+ await learningChange({target:{name:'answer',value:'1'}});
+ await learningClick({id:'grade-answer',dataset:{}});
+ assert.equal(calls.length,2,'choice grading makes no model call');
+ assert.match(ctx.panel.innerHTML,/1 \/ 1 points/);
+ assert.ok(ctx.panel.innerHTML.indexOf('id="next-question"')>ctx.panel.innerHTML.indexOf('<aside'));
+ await learningClick({id:'next-question',dataset:{}});
+ await learningClick({id:'next-question',dataset:{}});
+ await learningChange({target:{id:'quiz-answer',value:'Water leaves the cell.'}});
+ await learningClick({id:'prev-question',dataset:{}});
+ await learningClick({id:'next-question',dataset:{}});
+ assert.match(ctx.panel.innerHTML,/Water leaves the cell\./);
+ await learningClick({id:'grade-answer',dataset:{}});
+ const finished=JSON.parse(values.get('soma-local-ai-v1'));
+ assert.equal(finished.quizzes[0].attempts[2].grade.earned,1);
+ assert.equal(JSON.stringify(finished.quizzes[0].questions),key,'grading never changes keys or rubrics');
+ validateBackup({format:'soma-local-ai',version:1,...finished});
+ const broken=structuredClone(finished);broken.quizzes[0].attempts[2].grade.earned=999;
+ assert.throws(()=>validateBackup({format:'soma-local-ai',version:1,...broken}));
+});

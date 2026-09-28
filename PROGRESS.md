@@ -99,3 +99,12 @@ The atlas covers major introductory structures, not every named organ or membran
 - Added structured quiz generation, frozen answer keys/rubrics, deterministic choice grading, criterion-based written-answer feedback, and review flags for unsupported evidence.
 - Added local conversation/quiz history, reassessment history, and JSON backup import/export.
 - 44 JavaScript checks pass, covering source validation, malformed quizzes, retrieval, grading evidence and legacy studios. Native/live-model verification follows before the desktop release.
+
+## Local AI phase 3 — September 27, 2026
+
+- Hardened unavailable-drive handling and added discovery of common existing libraries without changing global Ollama settings.
+- Confirmed the background launch button starts a local-only session; installed model detection, conversation, quiz scoring, persistence, and backup export were exercised in the desktop app.
+- Added independent structured-output constraints, bounded repair, guaranteed mixed-format batches, saved answer drafts, visible navigation and assessment history.
+- 46 JavaScript checks and 2 Rust checks pass. Live local-model checks cover valid written-question generation and correct/partial/wrong/injected/negated answers.
+- Built the Windows x64 NSIS installer. Installer and checksum will be distributed through GitHub Releases; models and local data are not published.
+- Documented setup, data storage, model migration, source grounding and verification limits in source/local-ai/README.md.

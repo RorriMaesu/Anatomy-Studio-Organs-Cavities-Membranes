@@ -59,3 +59,9 @@ The labs cover tonicity, secretion routing, DNA complementarity, transcription/t
 Source review and stage plan: [DEVELOPMENT](source/chapter3/DEVELOPMENT.md). Detailed curriculum mapping: [COVERAGE](source/chapter3/COVERAGE.md). Figure sources and schematic simplifications: [FIGURES](source/chapter3/FIGURES.md). Artwork and text are educational adaptations under CC BY-NC-SA 4.0. Ten reference figures retain their original labels; no new connector lines are added to them.
 
 Chapter 3 is served directly from `dist/chapter3/`; there is no build step. The entry module is `studio.js`, with `content.js`, `diagrams.js`, `engine.js`, and `labs.js`. Chapter 3 browser storage uses `soma-cell-studio-v1`, separate from the older atlas. Run `npm test` for the complete suite.
+
+## Local desktop companion
+
+The Local AI page is linked from both studios. The Windows desktop edition adds a Chapter 3 Socratic tutor, generated quizzes and written-answer feedback through local Ollama models. It detects whether Ollama is installed and running, and provides a background-launch button, hardware suggestions, model downloads and library selection.
+
+Download installers from [GitHub Releases](https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases/latest). See [the desktop guide](source/local-ai/README.md) for setup, storage behavior, limitations, and build instructions. The website itself does not inspect your computer or run a local model.

@@ -1,30 +1,237 @@
-import {renderLearning,learningClick,learningChange} from './learning.js';
-import {catalog,recommendation,statusLabel,escapeHtml as e} from './core.js';
-const native=!!window.__TAURI__?.core?.invoke;
-const invoke=(cmd,args={})=>native?window.__TAURI__.core.invoke(cmd,args):Promise.reject(new Error('Open Soma Desktop to use local AI.'));
-let tab='setup',state=null,hw=null,installed=[],busy=false,chosen=localStorage.getItem('soma-ai-model')||'',folder='',exe='';
-const panel=document.querySelector('#panel');
-function message(text,error=false){const m=document.querySelector('#message');m.textContent=String(text);m.classList.toggle('error',error);}
-function gb(n){return (n/2**30).toFixed(1)+' GB';}
-function saveChoice(){localStorage.setItem('soma-ai-model',chosen);}
-function setup(){const rec=recommendation(hw);panel.innerHTML=`<div class="grid"><article class="card"><p class="eyebrow">YOUR LOCAL CONNECTION</p><h2>Meet your study engine.</h2><div class="status"><span>Ollama</span><b>${e(statusLabel(state))}</b></div><p class="muted">Soma starts its own hidden Ollama session with cloud features disabled. Other Ollama apps keep their settings. Closing Soma ends this session.</p><div class="row"><button class="primary" id="launch" ${!native||busy||!state?.installed||state?.ready?'disabled':''}>${state?.running?'Start Soma session':'Launch Ollama in background'}</button><button id="refresh" ${!native||busy?'disabled':''}>Refresh status</button></div><label>Model library · ${e(state?.librarySource||'detected in desktop')}</label><p class="path"><code>${e(state?.library||'Open the desktop edition to detect your folders.')}</code></p><small>${state?.ready?'Active for this Soma session.':'Configured location; launch the session to verify its model list.'}</small><details><summary>Installation & storage</summary><p class="muted">Choose a library before downloading. Switching libraries does not move files or change other Ollama apps. Copying preserves the original.</p><label>Ollama executable</label><input id="exe" readonly value="${e(exe||state?.executable||'')}"><button id="browse-exe" ${!native||busy?'disabled':''}>Locate ollama.exe</button><label>Model library folder</label><input id="folder" readonly value="${e(folder||state?.library||'')}"><div class="row"><button id="browse-folder" ${!native||busy?'disabled':''}>Choose folder</button><button id="save-folder" ${!native||busy?'disabled':''}>Use this library</button><button id="move-folder" ${!native||busy?'disabled':''}>Copy current library here</button></div><p class="muted">Copying requires an empty destination and other Ollama apps to be closed. A hash check verifies every file. This can take several minutes.</p><h3>Need Ollama?</h3><div class="row"><button id="official" ${!native?'disabled':''}>Download official installer ↗</button><button id="install" ${!native||busy?'disabled':''}>Choose install folder & run installer</button></div><small>Download OllamaSetup.exe first. Soma checks its publisher signature, then opens the installer with your chosen destination. After installation, refresh or locate ollama.exe.</small></details></article><article class="card"><p class="eyebrow">A MODEL THAT FITS</p><h2>Your hardware, your choice.</h2>${hw?`<div class="metrics"><div class="metric"><b>${gb(hw.ramBytes)}</b>system memory</div><div class="metric"><b>${hw.gpus.length?((hw.gpus[0].totalMiB)/1024).toFixed(1)+' GB':'Unknown'}</b>GPU memory</div></div><p class="muted">${e(hw.gpus.map(g=>g.name).join(', ')||hw.otherGpuNames||'GPU information unavailable')}. ${e(hw.cpu||'')}</p>`:'<p class="muted">The desktop edition measures RAM and NVIDIA VRAM. Other GPU names are detected; unknown VRAM stays unknown.</p>'}<p>${rec?`Suggested starting point: <b>${e(rec.tag)}</b>.`:'Recommendations appear after a hardware check.'}</p><small>Estimates include memory headroom. Actual speed and available memory vary; CPU fallback can be slower. Downloads and runtime VRAM are different sizes.</small><label for="model">Installed model</label><select id="model" ${!installed.length||busy?'disabled':''}><option value="">Choose a model</option>${installed.map(m=>`<option value="${e(m.name)}" ${m.name===chosen?'selected':''}>${e(m.name)} · ${gb(m.size)}</option>`).join('')}</select><label for="download-model">Download a local model</label><select id="download-model" ${busy?'disabled':''}>${catalog.map(m=>`<option value="${e(m.tag)}" ${m.tag===rec?.tag?'selected':''}>${e(m.label)} · ${m.gb} GB${m.tag===rec?.tag?' · Suggested':''}</option>`).join('')}</select><div class="row"><button class="primary" id="download" ${!state?.ready||busy?'disabled':''}>Download to this library</button><button id="cancel" ${!busy?'disabled':''}>Cancel current request</button></div><p id="download-status" class="muted" aria-live="polite"></p><progress id="download-progress" value="0" max="100" hidden></progress><small>Model catalog: <a href="https://ollama.com/library/qwen3.5/tags" target="_blank" rel="noopener">Qwen3.5</a>. Review the model’s license before downloading. No model downloads begin automatically.</small></article></div>`;}
-async function refresh(){state=await invoke('status');folder=state.library;exe=state.executable||'';if(state.ready){const data=await invoke('models');installed=(data.models||[]).filter(m=>!m.name.toLowerCase().includes('cloud'));if(!installed.some(m=>m.name===chosen)){chosen=installed[0]?.name||'';saveChoice();}}else installed=[];}
-function render(){document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));if(tab==='setup')setup();else renderLearning({panel,tab,busy,ready:state?.ready,chosen,installed,invoke,work,message,render,setTab:(next)=>{tab=next;render();}});}
-async function work(fn){if(busy)return;busy=true;render();try{await fn();}catch(err){message(err.message||err,true);}finally{busy=false;render();}}
-document.addEventListener('click',async ev=>{const b=ev.target.closest('button');if(!b||b.disabled)return;const id=b.id;if(b.dataset.tab){if(busy){message('Finish or cancel the current request before switching tools.');return;}tab=b.dataset.tab;render();return;}if(id==='cancel'){await invoke('cancel_job');message('Cancelling…');return;}
-if(tab!=='setup'&&await learningClick(b))return;
-if(id==='launch')await work(async()=>{message('Launching Ollama in the background…');await invoke('launch');await refresh();message('Local Ollama is ready. Choose a model to begin.');});
-if(id==='refresh')await work(async()=>{await refresh();message('Status refreshed.');});
-if(id==='browse-folder'){folder=await invoke('choose_folder')||folder;render();}
-if(id==='browse-exe'){exe=await invoke('choose_executable')||exe;render();}
-if(id==='save-folder')await work(async()=>{await invoke('save_settings',{cfg:{library:folder,executable:exe||null}});await refresh();message('Library saved for Soma. Launch the local session to use it.');});
-if(id==='move-folder')await work(async()=>{message('Copying and verifying your library. Original files will be preserved…');const result=await invoke('migrate_library',{destination:folder});await refresh();message(result);});
-if(id==='official')await invoke('open_official',{kind:'ollama'});
-if(id==='install')await work(async()=>{const destination=await invoke('choose_folder');if(destination){await invoke('install_ollama',{destination});message('Installer opened. After it finishes, refresh status or locate the installed ollama.exe.');}});
-if(id==='download'){const model=document.querySelector('#download-model').value;await work(async()=>{message(`Downloading ${model} into ${state.library}…`);await invoke('pull_model',{model});await refresh();chosen=installed.find(m=>m.name===model)?.name||chosen;saveChoice();message('Download verified by Ollama. Your model is ready to select.');});}
+import { renderLearning, learningClick, learningChange } from "./learning.js";
+import {
+  catalog,
+  recommendation,
+  statusLabel,
+  escapeHtml as e,
+} from "./core.js";
+const native = !!window.__TAURI__?.core?.invoke;
+const invoke = (cmd, args = {}) =>
+  native
+    ? window.__TAURI__.core.invoke(cmd, args)
+    : Promise.reject(new Error("Open Soma Desktop to use local AI."));
+const storageGet = (key) => {
+  try {
+    return localStorage.getItem(key) || "";
+  } catch {
+    return "";
+  }
+};
+let tab = "setup",
+  state = null,
+  hw = null,
+  installed = [],
+  busy = false,
+  chosen = storageGet("soma-ai-model"),
+  folder = "",
+  exe = "";
+const panel = document.querySelector("#panel");
+function message(text, error = false) {
+  const m = document.querySelector("#message");
+  m.textContent = String(text);
+  m.classList.toggle("error", error);
+}
+function gb(n) {
+  return (n / 2 ** 30).toFixed(1) + " GB";
+}
+function saveChoice() {
+  try {
+    localStorage.setItem("soma-ai-model", chosen);
+  } catch {
+    message("Model preference could not be saved.", true);
+  }
+}
+function setup() {
+  const rec = recommendation(hw);
+  panel.innerHTML = `<div class="grid"><article class="card"><p class="eyebrow">YOUR LOCAL CONNECTION</p><h2>Meet your study engine.</h2><div class="status"><span>Ollama</span><b>${e(statusLabel(state))}</b></div><p class="muted">Soma starts its own hidden Ollama session with cloud features disabled. Other Ollama apps keep their settings. Closing Soma ends this session.</p><div class="row"><button class="primary" id="launch" ${!native || busy || !state?.installed || state?.ready ? "disabled" : ""}>${state?.running ? "Start Soma session" : "Launch Ollama in background"}</button><button id="refresh" ${!native || busy ? "disabled" : ""}>Refresh status</button></div>${state && !state.libraryExists ? '<p class="error">This model folder is unavailable. Choose an available library under Installation & storage.</p>' : ""}<label>Model library · ${e(state?.librarySource || "detected in desktop")}</label><p class="path"><code>${e(state?.library || "Open the desktop edition to detect your folders.")}</code></p><small>${state?.ready ? "Active for this Soma session." : "Configured location; launch the session to verify its model list."}</small><details><summary>Installation & storage</summary><p class="muted">Choose a library before downloading. Switching libraries does not move files or change other Ollama apps. Copying preserves the original.</p><label>Ollama executable</label><input id="exe" readonly value="${e(exe || state?.executable || "")}"><button id="browse-exe" ${!native || busy ? "disabled" : ""}>Locate ollama.exe</button>${state?.candidates?.length ? '<label for="found-library">Existing libraries found</label><select id="found-library"><option value="">Choose a detected library</option>' + state.candidates.map((p) => `<option value="${e(p)}">${e(p)}</option>`).join("") + "</select>" : ""}<label>Model library folder</label><input id="folder" readonly value="${e(folder || state?.library || "")}"><div class="row"><button id="browse-folder" ${!native || busy ? "disabled" : ""}>Choose folder</button><button id="save-folder" ${!native || busy ? "disabled" : ""}>Use this library</button><button id="move-folder" ${!native || busy ? "disabled" : ""}>Copy current library here</button></div><p class="muted">Copying requires an empty destination and other Ollama apps to be closed. A hash check verifies every file. This can take several minutes.</p><h3>Need Ollama?</h3><div class="row"><button id="official" ${!native ? "disabled" : ""}>Download official installer ↗</button><button id="install" ${!native || busy ? "disabled" : ""}>Choose install folder & run installer</button></div><small>Download OllamaSetup.exe first. Soma checks its publisher signature, then opens the installer with your chosen destination. After installation, refresh or locate ollama.exe.</small></details></article><article class="card"><p class="eyebrow">A MODEL THAT FITS</p><h2>Your hardware, your choice.</h2>${hw ? `<div class="metrics"><div class="metric"><b>${gb(hw.ramBytes)}</b>system memory</div><div class="metric"><b>${hw.gpus.length ? (hw.gpus[0].totalMiB / 1024).toFixed(1) + " GB" : "Unknown"}</b>GPU memory</div></div><p class="muted">${e(hw.gpus.map((g) => g.name).join(", ") || hw.otherGpuNames || "GPU information unavailable")}. ${e(hw.cpu || "")}</p>` : '<p class="muted">The desktop edition measures RAM and NVIDIA VRAM. Other GPU names are detected; unknown VRAM stays unknown.</p>'}<p>${rec ? `Suggested starting point: <b>${e(rec.tag)}</b>.` : "Recommendations appear after a hardware check."}</p><small>Estimates include memory headroom. Actual speed and available memory vary; CPU fallback can be slower. Downloads and runtime VRAM are different sizes.</small><label for="model">Installed model</label><select id="model" ${!installed.length || busy ? "disabled" : ""}><option value="">Choose a model</option>${installed.map((m) => `<option value="${e(m.name)}" ${m.name === chosen ? "selected" : ""}>${e(m.name)} · ${gb(m.size)}</option>`).join("")}</select><label for="download-model">Download a local model</label><select id="download-model" ${busy ? "disabled" : ""}>${catalog.map((m) => `<option value="${e(m.tag)}" ${m.tag === rec?.tag ? "selected" : ""}>${e(m.label)} · ${m.gb} GB${m.tag === rec?.tag ? " · Suggested" : ""}</option>`).join("")}</select><div class="row"><button class="primary" id="download" ${!state?.ready || busy ? "disabled" : ""}>Download to this library</button><button id="cancel" ${!busy ? "disabled" : ""}>Cancel current request</button></div><p id="download-status" class="muted" aria-live="polite"></p><progress id="download-progress" value="0" max="100" hidden></progress><details><summary>Choose another model</summary><label for="custom-model">Ollama library tag</label><input id="custom-model" maxlength="180" placeholder="For example: gemma4:12b" ${busy ? "disabled" : ""}><small>Check the model’s size, hardware requirements and license on ollama.com before downloading.</small></details><small>Model catalog: <a href="https://ollama.com/library/qwen3.5/tags" target="_blank" rel="noopener">Qwen3.5</a>. Review the model’s license before downloading. No model downloads begin automatically.</small></article></div>`;
+}
+async function refresh() {
+  state = await invoke("status");
+  folder = state.library;
+  exe = state.executable || "";
+  if (state.ready) {
+    const data = await invoke("models");
+    installed = (data.models || []).filter(
+      (m) => !m.name.toLowerCase().includes("cloud"),
+    );
+    if (!installed.some((m) => m.name === chosen)) {
+      chosen =
+        installed.find((m) => /^qwen3:8b$/.test(m.name))?.name ||
+        installed[0]?.name ||
+        "";
+      saveChoice();
+    }
+  } else installed = [];
+}
+function render() {
+  document.body.dataset.tool = tab;
+  document
+    .querySelectorAll("[data-tab]")
+    .forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+  if (tab === "setup") setup();
+  else
+    renderLearning({
+      panel,
+      tab,
+      busy,
+      ready: state?.ready,
+      chosen,
+      installed,
+      invoke,
+      work,
+      message,
+      render,
+      setTab: (next) => {
+        tab = next;
+        render();
+      },
+    });
+}
+async function work(fn) {
+  if (busy) return;
+  busy = true;
+  render();
+  try {
+    await fn();
+  } catch (err) {
+    message(err.message || err, true);
+  } finally {
+    busy = false;
+    render();
+  }
+}
+document.addEventListener("click", async (ev) => {
+  const b = ev.target.closest("button");
+  if (!b || b.disabled) return;
+  const id = b.id;
+  if (b.dataset.tab) {
+    if (busy) {
+      message("Finish or cancel the current request before switching tools.");
+      return;
+    }
+    tab = b.dataset.tab;
+    render();
+    return;
+  }
+  if (id === "cancel") {
+    await invoke("cancel_job");
+    message("Cancelling…");
+    return;
+  }
+  if (tab !== "setup" && (await learningClick(b))) return;
+  if (id === "launch")
+    await work(async () => {
+      message("Launching Ollama in the background…");
+      await invoke("launch");
+      await refresh();
+      message("Local Ollama is ready. Choose a model to begin.");
+    });
+  if (id === "refresh")
+    await work(async () => {
+      await refresh();
+      message("Status refreshed.");
+    });
+  if (id === "browse-folder") {
+    folder = (await invoke("choose_folder")) || folder;
+    render();
+  }
+  if (id === "browse-exe") {
+    exe = (await invoke("choose_executable")) || exe;
+    render();
+  }
+  if (id === "save-folder")
+    await work(async () => {
+      await invoke("save_settings", {
+        cfg: { library: folder, executable: exe || null },
+      });
+      await refresh();
+      message("Library saved for Soma. Launch the local session to use it.");
+    });
+  if (id === "move-folder")
+    await work(async () => {
+      message(
+        "Copying and verifying your library. Original files will be preserved…",
+      );
+      const result = await invoke("migrate_library", { destination: folder });
+      await refresh();
+      message(result);
+    });
+  if (id === "official") await invoke("open_official", { kind: "ollama" });
+  if (id === "install")
+    await work(async () => {
+      const destination = await invoke("choose_folder");
+      if (destination) {
+        await invoke("install_ollama", { destination });
+        message(
+          "Installer opened. After it finishes, refresh status or locate the installed ollama.exe.",
+        );
+      }
+    });
+  if (id === "download") {
+    const model =
+      document.querySelector("#custom-model").value.trim() ||
+      document.querySelector("#download-model").value;
+    await work(async () => {
+      const estimate = catalog.find((m) => m.tag === model);
+      const disk = hw?.disks?.find((d) =>
+        state.library.toLowerCase().startsWith(d.mount.toLowerCase()),
+      );
+      if (estimate && disk && disk.freeBytes < (estimate.gb + 1) * 1e9)
+        throw Error(
+          "Not enough free space on this drive for the selected model plus working space.",
+        );
+      message(`Downloading ${model} into ${state.library}…`);
+      await invoke("pull_model", { model });
+      await refresh();
+      chosen = installed.find((m) => m.name === model)?.name || chosen;
+      saveChoice();
+      message("Download verified by Ollama. Your model is ready to select.");
+    });
+  }
 });
-document.addEventListener('change',ev=>{if(['model','learning-model'].includes(ev.target.id)){chosen=ev.target.value;saveChoice();render();}else learningChange(ev);});
-if(native){window.__TAURI__.event.listen('model-progress',({payload:p})=>{const out=document.querySelector('#download-status'),bar=document.querySelector('#download-progress');if(out)out.textContent=p.status+(p.total?` · ${Math.round(100*(p.completed||0)/p.total)}%`:'');if(bar){bar.hidden=!p.total;bar.value=p.total?100*(p.completed||0)/p.total:0;}});render();work(async()=>{message('Checking Ollama and hardware…');await refresh();hw=await invoke('hardware');message('Setup check complete.');});}else{document.querySelector('#web-note').hidden=false;render();}
+document.addEventListener("change", (ev) => {
+  if (["model", "learning-model"].includes(ev.target.id)) {
+    chosen = ev.target.value;
+    saveChoice();
+    render();
+  } else if (ev.target.id === "found-library") {
+    folder = ev.target.value || folder;
+    document.querySelector("#folder").value = folder;
+  } else learningChange(ev);
+});
+if (native) {
+  window.__TAURI__.event.listen("model-progress", ({ payload: p }) => {
+    const out = document.querySelector("#download-status"),
+      bar = document.querySelector("#download-progress");
+    if (out)
+      out.textContent =
+        p.status +
+        (p.total
+          ? ` · ${Math.round((100 * (p.completed || 0)) / p.total)}%`
+          : "");
+    if (bar) {
+      bar.hidden = !p.total;
+      bar.value = p.total ? (100 * (p.completed || 0)) / p.total : 0;
+    }
+  });
+  render();
+  work(async () => {
+    message("Checking Ollama and hardware…");
+    await refresh();
+    hw = await invoke("hardware");
+    message("Setup check complete.");
+  });
+} else {
+  document.querySelector("#web-note").hidden = false;
+  render();
+}
 
-document.addEventListener('input',ev=>{if(['tutor-input','quiz-answer'].includes(ev.target.id))learningChange(ev);});
-window.addEventListener('beforeunload',ev=>{if(busy){ev.preventDefault();ev.returnValue='';}});
+document.addEventListener("input", (ev) => {
+  if (["tutor-input", "quiz-answer"].includes(ev.target.id)) learningChange(ev);
+});
+window.addEventListener("beforeunload", (ev) => {
+  if (busy) {
+    ev.preventDefault();
+    ev.returnValue = "";
+  }
+});
