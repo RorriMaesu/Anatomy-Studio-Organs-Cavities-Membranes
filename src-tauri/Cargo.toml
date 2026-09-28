@@ -1,6 +1,6 @@
 [package]
 name = "soma-desktop"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "Soma local learning studio"
 
@@ -17,6 +17,7 @@ rfd = "0.15"
 sysinfo = "0.33"
 sha2 = "0.10"
 futures-util = "0.3"
+tauri-plugin-updater = "2"
 
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55"

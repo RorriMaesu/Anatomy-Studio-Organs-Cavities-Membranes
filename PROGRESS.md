@@ -116,3 +116,10 @@ Phase 4 — Guided setup and student navigation (2026-09-27)
 - Existing model reuse, hardware suggestions, optional storage settings, and actionable errors.
 - Native installation automation follows in the next desktop release; published installer remains 0.1.0 until that release is ready.
 - Validation: all 46 existing JavaScript checks pass.
+
+Phase 5 — Native guided installation and update delivery (2026-09-27)
+- Official Ollama download, disk preflight, publisher verification, custom install folder, completion monitoring and cancellation.
+- Existing models reused; explicit download choice; model readiness check; remembered setup and automatic background startup.
+- Separate study windows keep setup operations alive, and native textbook links open in the user's browser.
+- Signed updater support with an explicit Update and restart action. Windows Authenticode signing remains unconfigured.
+- 50 JavaScript and 3 Rust checks passed. Existing-user desktop flow visually checked; clean-machine installation and future-version update require additional coverage.

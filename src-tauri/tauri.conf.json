@@ -1,13 +1,53 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Soma Desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "identifier": "io.github.rorrimaesu.soma",
-  "build": { "frontendDist": "../dist" },
+  "build": {
+    "frontendDist": "../dist"
+  },
   "app": {
     "withGlobalTauri": true,
-    "windows": [{ "label": "main", "title": "Soma · Local learning studio", "url": "local-ai/index.html", "width": 1280, "height": 840, "minWidth": 800, "minHeight": 600 }],
-    "security": { "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src ipc: http://ipc.localhost 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'" }
+    "windows": [
+      {
+        "label": "main",
+        "title": "Soma \u00b7 Local learning studio",
+        "url": "local-ai/index.html",
+        "width": 1280,
+        "height": 840,
+        "minWidth": 800,
+        "minHeight": 600
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src ipc: http://ipc.localhost 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'"
+    }
   },
-  "bundle": { "active": true, "targets": ["nsis"], "icon": ["icons/icon.ico"], "windows": { "nsis": { "installMode": "currentUser", "displayLanguageSelector": false } } }
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
+    "icon": [
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "displayLanguageSelector": false
+      }
+    },
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDNDRDE2QjA3NTExNDc5OTQKUldTVWVSUlJCMnZSUEFUVG1FSE5CZ2pVdXA3VForUlpQa013eGpyNkZKZVlsUmtrcjdmVkdYcCsK",
+      "endpoints": [
+        "https://rorrimaesu.github.io/Anatomy-Studio-Organs-Cavities-Membranes/dist/local-ai/update.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
 }

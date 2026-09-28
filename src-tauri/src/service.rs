@@ -16,6 +16,7 @@ const BASE: &str = "http://127.0.0.1:11435";
 #[derive(Default)]
 pub struct Runtime {
     child: Mutex<Option<Child>>,
+    installer: Mutex<Option<Child>>,
     busy: AtomicBool,
     cancel: Arc<AtomicBool>,
 }
@@ -185,7 +186,7 @@ pub async fn status(app: tauri::AppHandle, rt: State<'_, Runtime>) -> Result<Val
         candidates.push(default);
     }
     Ok(
-        json!({"installed":exe.is_some(),"executable":exe,"running":normal.is_some()||own.is_some(),"standardRunning":normal.is_some(),"ready":own.is_some(),"version":own.or(normal),"library":root,"libraryExists":root.is_dir(),"candidates":candidates,"librarySource":if cfg.library.is_some(){"Soma preference"}else if user_env("OLLAMA_MODELS").is_some(){"OLLAMA_MODELS configuration"}else{"Ollama default"},"busy":rt.busy.load(Ordering::SeqCst)}),
+        json!({"installed":exe.is_some(),"executable":exe,"running":normal.is_some()||own.is_some(),"standardRunning":normal.is_some(),"ready":own.is_some(),"version":own.or(normal),"library":root,"libraryExists":root.is_dir(),"candidates":candidates,"installDefault":std::env::var("LOCALAPPDATA").ok().map(|p|PathBuf::from(p).join("Programs/Ollama")),"librarySource":if cfg.library.is_some(){"Soma preference"}else if user_env("OLLAMA_MODELS").is_some(){"OLLAMA_MODELS configuration"}else{"Ollama default"},"busy":rt.busy.load(Ordering::SeqCst)}),
     )
 }
 #[tauri::command]
@@ -473,22 +474,301 @@ pub fn open_official(kind: String) -> Result<(), String> {
     c.arg(url).spawn().map_err(|e| e.to_string())?;
     Ok(())
 }
+fn install_space(path: &Path, bytes: u64) -> Result<(), String> {
+    let disks = sysinfo::Disks::new_with_refreshed_list();
+    let free = disks
+        .iter()
+        .filter(|d| {
+            path.to_string_lossy()
+                .to_lowercase()
+                .starts_with(&d.mount_point().to_string_lossy().to_lowercase())
+        })
+        .max_by_key(|d| d.mount_point().as_os_str().len())
+        .map(|d| d.available_space());
+    if free.is_some_and(|f| f < bytes) {
+        return Err(
+            "Not enough disk space. Choose another installation drive or free space and retry."
+                .into(),
+        );
+    }
+    Ok(())
+}
+fn approved_link(url: &str) -> bool {
+    let Ok(u) = reqwest::Url::parse(url) else {
+        return false;
+    };
+    if u.scheme() != "https"
+        || !u.username().is_empty()
+        || u.password().is_some()
+        || u.port().is_some()
+    {
+        return false;
+    }
+    match u.host_str() {
+        Some("openstax.org") => u
+            .path()
+            .starts_with("/books/anatomy-and-physiology-2e/pages/"),
+        Some("ollama.com") => u.path().starts_with("/library/") || u.path() == "/download/windows",
+        Some("github.com") => u
+            .path()
+            .starts_with("/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases"),
+        _ => false,
+    }
+}
 #[tauri::command]
-pub async fn install_ollama(destination: String) -> Result<(), String> {
-    let installer = rfd::AsyncFileDialog::new()
-        .set_title("Select the official OllamaSetup.exe you downloaded")
-        .add_filter("Ollama installer", &["exe"])
-        .pick_file()
+pub async fn check_update(app: tauri::AppHandle) -> Result<Value, String> {
+    use tauri_plugin_updater::UpdaterExt;
+    let update = app
+        .updater_builder()
+        .timeout(Duration::from_secs(20))
+        .build()
+        .map_err(|e| e.to_string())?
+        .check()
         .await
-        .ok_or("Installation cancelled")?;
-    let path = installer.path().to_path_buf();
-    let target = PathBuf::from(destination);
+        .map_err(|e| {
+            format!(
+                "Could not check for updates. Check your internet connection and try again. {e}"
+            )
+        })?;
+    Ok(match update {
+        Some(u) => json!({"available":true,"version":u.version}),
+        None => json!({"available":false,"version":app.package_info().version.to_string()}),
+    })
+}
+#[tauri::command]
+pub async fn apply_update(
+    app: tauri::AppHandle,
+    rt: State<'_, Runtime>,
+    version: String,
+) -> Result<(), String> {
+    use tauri_plugin_updater::UpdaterExt;
+    let _busy = lock_job(&rt)?;
+    let cleanup_app = app.clone();
+    let updater = app
+        .updater_builder()
+        .timeout(Duration::from_secs(20))
+        .on_before_exit(move || {
+            cleanup_app.state::<Runtime>().stop();
+        })
+        .build()
+        .map_err(|e| e.to_string())?;
+    let mut update = updater
+        .check()
+        .await
+        .map_err(|e| e.to_string())?
+        .ok_or("Soma is already up to date.")?;
+    if update.version != version {
+        return Err("The available update changed. Check again before installing.".into());
+    }
+    update.timeout = Some(Duration::from_secs(600));
+    let mut completed = 0u64;
+    let download=update.download(|chunk,total|{completed+=chunk as u64;let _=app.emit("setup-progress",json!({"status":"Downloading a verified Soma update…","completed":completed,"total":total}));},||{});
+    tokio::pin!(download);
+    let bytes = loop {
+        if rt.cancel.load(Ordering::SeqCst) {
+            return Err("Update download cancelled. Your current app is unchanged.".into());
+        }
+        tokio::select! {r=&mut download=>break r.map_err(|e|e.to_string())?,_=tokio::time::sleep(Duration::from_millis(150))=>{}}
+    };
+    if rt.cancel.load(Ordering::SeqCst) {
+        return Err("Update cancelled before installation.".into());
+    }
+    rt.stop();
+    update.install(bytes).map_err(|e| e.to_string())?;
+    Ok(())
+}
+#[tauri::command]
+pub fn open_studio(app: tauri::AppHandle, section: String) -> Result<(), String> {
+    let path = match section.as_str() {
+        "chapter3" => "chapter3/index.html",
+        "atlas" => "index.html",
+        _ => return Err("Unknown studio".into()),
+    };
+    let label = format!("study-{section}");
+    if let Some(window) = app.get_webview_window(&label) {
+        window.set_focus().map_err(|e| e.to_string())?;
+        return Ok(());
+    }
+    tauri::WebviewWindowBuilder::new(&app, label, tauri::WebviewUrl::App(path.into()))
+        .title("Soma · Study studio")
+        .inner_size(1280.0, 840.0)
+        .build()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+#[tauri::command]
+pub fn open_link(url: String) -> Result<(), String> {
+    if !approved_link(&url) {
+        return Err("This link is outside the supported textbook and download sites.".into());
+    }
+    let mut cmd = Command::new("explorer.exe");
+    hidden(&mut cmd)
+        .arg(url)
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+#[tauri::command]
+pub async fn install_ollama(
+    app: tauri::AppHandle,
+    rt: State<'_, Runtime>,
+    destination: Option<String>,
+) -> Result<(), String> {
+    use std::io::Write;
+    let _busy = lock_job(&rt)?;
+    if executable(&settings(&app)).is_some() {
+        return Ok(());
+    }
+    {
+        let mut installer = rt.installer.lock().unwrap();
+        if let Some(child) = installer.as_mut() {
+            if child.try_wait().map_err(|e| e.to_string())?.is_none() {
+                return Err("The Ollama installer is already open. Finish or close that installer, then choose Check again.".into());
+            }
+        }
+        *installer = None;
+    }
+    let target = destination.map(PathBuf::from).unwrap_or_else(|| {
+        PathBuf::from(std::env::var("LOCALAPPDATA").unwrap_or_default()).join("Programs/Ollama")
+    });
     if !target.is_absolute() {
         return Err("Choose an absolute installation folder.".into());
     }
-    tauri::async_runtime::spawn_blocking(move|| {let mut check=Command::new("powershell.exe");hidden(&mut check);check.env("SOMA_INSTALLER",&path).args(["-NoProfile","-NonInteractive","-Command","$s = Get-AuthenticodeSignature -LiteralPath $env:SOMA_INSTALLER; if ($s.Status -ne 'Valid' -or $s.SignerCertificate.Subject -notmatch 'Ollama') { exit 1 }"]);if !check.status().map_err(|e|e.to_string())?.success(){return Err("This installer does not have a valid Ollama signature. Download a fresh copy from ollama.com.".into());}
-        let mut command=Command::new(path);command.arg(format!("/DIR={}",target.display()));command.spawn().map_err(|e|e.to_string())?;Ok(())
-    }).await.map_err(|e|e.to_string())?
+    writable(&target)?;
+    install_space(&target, 4 * 1024 * 1024 * 1024)?;
+    let cache = app
+        .path()
+        .app_cache_dir()
+        .map_err(|e| e.to_string())?
+        .join("installers");
+    writable(&cache)?;
+    let path = cache.join(format!(
+        "OllamaSetup-{}-{}.exe",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_millis()
+    ));
+    struct DownloadFile(PathBuf);
+    impl Drop for DownloadFile {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_file(&self.0);
+        }
+    }
+    let _cleanup = DownloadFile(path.clone());
+    let c = reqwest::Client::builder()
+        .connect_timeout(Duration::from_secs(20))
+        .timeout(Duration::from_secs(7200))
+        .https_only(true)
+        .build()
+        .map_err(|e| e.to_string())?;
+    let request = c.get("https://ollama.com/download/OllamaSetup.exe").send();
+    tokio::pin!(request);
+    let response = loop {
+        if rt.cancel.load(Ordering::SeqCst) {
+            return Err("Download cancelled.".into());
+        }
+        tokio::select! {r=&mut request=>break r.map_err(|e|format!("Download connection failed: {e}"))?.error_for_status().map_err(|e|e.to_string())?,_ = tokio::time::sleep(Duration::from_millis(150))=>{}}
+    };
+    let total = response.content_length();
+    install_space(
+        &cache,
+        total.unwrap_or(2 * 1024 * 1024 * 1024) + 200 * 1024 * 1024,
+    )?;
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&path)
+        .map_err(|e| e.to_string())?;
+    let mut stream = response.bytes_stream();
+    let mut completed = 0u64;
+    let mut last = std::time::Instant::now() - Duration::from_secs(1);
+    loop {
+        if rt.cancel.load(Ordering::SeqCst) {
+            return Err(
+                "Installer download cancelled. Retry to download a fresh verified copy.".into(),
+            );
+        }
+        let next = tokio::select! {r=stream.next()=>r,_=tokio::time::sleep(Duration::from_millis(150))=>continue};
+        match next {
+            None => break,
+            Some(Err(e)) => return Err(format!("Installer download interrupted: {e}")),
+            Some(Ok(bytes)) => {
+                completed += bytes.len() as u64;
+                if completed > 8 * 1024 * 1024 * 1024 {
+                    return Err("Unexpected installer download size.".into());
+                }
+                file.write_all(&bytes).map_err(|e| e.to_string())?;
+            }
+        }
+        if last.elapsed() > Duration::from_millis(250) {
+            let _=app.emit("setup-progress",json!({"status":"Downloading official Ollama installer…","total":total,"completed":completed}));
+            last = std::time::Instant::now();
+        }
+    }
+    file.sync_all().map_err(|e| e.to_string())?;
+    drop(file);
+    if total.is_some_and(|t| t != completed) || completed == 0 {
+        return Err("Installer download was incomplete. Retry the download.".into());
+    }
+    let _ = app.emit(
+        "setup-progress",
+        json!({"status":"Verifying the installer’s publisher…"}),
+    );
+    let verify_path = path.clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        let mut check=Command::new("powershell.exe");hidden(&mut check);
+        check.env("SOMA_INSTALLER",verify_path).args(["-NoProfile","-NonInteractive","-Command",r#"$s = Get-AuthenticodeSignature -LiteralPath $env:SOMA_INSTALLER; if ($s.Status -ne 'Valid' -or $s.SignerCertificate.Subject -notmatch '(?:^|,\s*)(?:CN|O)="?Ollama(?:,? Inc\.?)?"?(?:,|$)') { exit 1 }"#]);
+        if !check.status().map_err(|e|e.to_string())?.success() {return Err("Installer publisher signature could not be verified. The installer was not run.".to_string());}Ok(())
+    }).await.map_err(|e|e.to_string())??;
+    if rt.cancel.load(Ordering::SeqCst) {
+        return Err("Installation cancelled before opening the installer.".into());
+    }
+    install_space(&target, 4 * 1024 * 1024 * 1024)?;
+    // Remember a custom destination so setup can recover even after Soma closes.
+    let mut cfg = settings(&app);
+    cfg.executable = Some(target.join("ollama.exe").to_string_lossy().into_owned());
+    persist(&app, &cfg)?;
+    let child = Command::new(&path)
+        .arg(format!("/DIR={}", target.display()))
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    *rt.installer.lock().unwrap() = Some(child);
+    let _ = app.emit(
+        "setup-progress",
+        json!({"status":"Finish the Ollama installer. Soma will continue automatically…"}),
+    );
+    loop {
+        if rt.cancel.load(Ordering::SeqCst) {
+            return Err("Stopped waiting. The Ollama installer may still be open; finish or cancel it there, then choose Check again.".into());
+        }
+        let finished = {
+            let mut guard = rt.installer.lock().unwrap();
+            guard.as_mut().and_then(|c| c.try_wait().ok()).flatten()
+        };
+        if let Some(exit) = finished {
+            *rt.installer.lock().unwrap() = None;
+            if !exit.success() {
+                return Err(
+                    "Ollama installation was cancelled or did not finish. Retry when ready.".into(),
+                );
+            }
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(500)).await;
+    }
+    // Some installers hand off to a child; allow its files to settle before checking.
+    for _ in 0..60 {
+        if rt.cancel.load(Ordering::SeqCst) {
+            return Err("Installation check cancelled. Choose Check again when ready.".into());
+        }
+        if executable(&settings(&app)).is_some() {
+            return Ok(());
+        }
+        tokio::time::sleep(Duration::from_secs(1)).await;
+    }
+    Err("The installer finished but Ollama was not detected. Choose Check again or locate your existing installation in Technical details.".into())
 }
 #[tauri::command]
 pub async fn migrate_library(
@@ -638,6 +918,21 @@ mod tests {
             assert!(valid_model(s).is_err());
         }
         assert!(valid_model("qwen3.5:9b-q4_K_M").is_ok());
+    }
+    #[test]
+    fn textbook_links_are_constrained_to_known_https_sources() {
+        assert!(approved_link(
+            "https://openstax.org/books/anatomy-and-physiology-2e/pages/3-1-the-cell-membrane"
+        ));
+        for url in [
+            "http://openstax.org/books/anatomy-and-physiology-2e/pages/a",
+            "https://openstax.org.evil.com/books/anatomy-and-physiology-2e/pages/a",
+            "https://user@openstax.org/books/anatomy-and-physiology-2e/pages/a",
+            "file:///C:/Windows",
+            "https://example.com/",
+        ] {
+            assert!(!approved_link(url));
+        }
     }
     #[test]
     fn migration_rejects_nested_and_preserves_source() {

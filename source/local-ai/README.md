@@ -1,14 +1,17 @@
 # Soma Desktop · local AI companion
 
-## Student setup
+## Student setup (0.2.0)
 
-1. Download the Windows x64 installer from this repository's Releases page and open Soma Desktop.
-2. Local setup distinguishes installation discovery, an already-running Ollama server, and a ready Soma session.
-3. If needed, download Ollama from its official website. The guided installer flow lets you choose an installation folder, then select the downloaded signed installer.
-4. Check the model library. If its drive is unavailable, open Installation & storage and select a detected library or browse to a folder. Choose **Use this library**.
-5. Click **Launch Ollama in background** (or **Start Soma session** if another server is already running). No console window is opened.
-6. Select an installed model, or choose a catalog model and download it. No model is downloaded automatically.
-7. Open the tutor or quiz workshop and choose a Chapter 3 topic.
+1. Use **Download Soma for Windows** on the companion page and open the installer. The installer supports choosing the app location.
+2. Open Soma, then **Set up my tutor**. Existing Ollama and models are detected. The app starts its own background session.
+3. If Ollama is missing, choose **Download and install Ollama**. Soma downloads from the official HTTPS endpoint, verifies the publisher signature, and opens its installer. Complete its prompts; detection resumes automatically. Storage/installation location choices are optional.
+4. Use a downloaded model, or choose the recommended download. Download size and available space are shown before the model download. **Check and use this model** runs a brief local response check.
+5. Choose **Ask your tutor** or **Practice a quiz**. Use topic-specific **Read this in the textbook** links to open the corresponding original OpenStax section in your browser.
+6. Later launches start the configured tutor automatically. **AI settings** contains model, storage, recovery, and update controls.
+
+The **Study home** screen links to all six Chapter 3 textbook sections. **Cell Studio** and the atlas open in separate desktop study windows so a setup download can continue. AI-generated practice defaults to three mixed questions; additional choices are under **Customize this practice**. Topic-specific starter questions help students begin a conversation.
+
+No installer or model download starts without the student's action. Cancelling model downloads preserves existing files; retry delegates resumption to Ollama. Cancelling the Ollama download requires a fresh download. If the official installer is already open, Stop stops waiting and asks the student to finish or cancel that separate installer. A saved custom installation destination supports rediscovery after restarting Soma.
 
 ## Architecture and local behavior
 
@@ -72,3 +75,13 @@ Checked September 27, 2026.
 Optional live regression: start Soma's local session, then run `node tests/local-ai-live.mjs`. It uses the already-installed model named by SOMA_TEST_MODEL (default qwen3:8b) and never downloads one. Results go to ignored work/local-ai/.
 
 - UI regression fixture verifies mixed-format generation, fixed keys, deterministic choice scoring, written grading, draft restoration, and backup validation. Packaged Windows executable startup and setup layout were inspected.
+
+## Updates and release signing
+
+Soma 0.2.0 adds **AI settings → App updates → Check for updates** and an explicit **Update and restart** action. Updates are checked against a public static manifest and their signatures are verified before installation. Existing study data and model storage are outside the installation folder. Internet is required for updates; tutoring remains local. Older 0.1.0 installations require the new installer once.
+
+Tauri updater signatures are separate from Windows publisher signatures. The updater public key is committed in the configuration; the private key lives outside the repository at `%USERPROFILE%/.codex/soma-release-keys/desktop.key`. Back up that private key securely; do not commit or publish it. Builds require TAURI_SIGNING_PRIVATE_KEY pointing to that file. The Windows installer remains unsigned for Authenticode because no publisher certificate is configured.
+
+For each release, upload the installer and `.sig`, publish a `windows-x86_64` manifest with the exact public asset URL and signature at `dist/local-ai/update.json`, and update the direct download link. Never publish a manifest before its assets exist. Test the current-version check after deployment. A future-version installation needs separate release/upgrade coverage.
+
+Current validation adds simulated first-run setup, state recovery, existing-model preference, disk checks, and native external-link restrictions. A clean Windows installation of Ollama, AMD/Intel hardware, and a real future-version upgrade remain additional machine tests; the existing user's Ollama and model library are not replaced to simulate a clean computer.
