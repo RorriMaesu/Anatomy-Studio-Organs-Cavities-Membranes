@@ -1,11 +1,11 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "notes": "Guided local AI setup, simpler study tools, and direct textbook links.",
-  "pub_date": "2026-09-28T16:45:03.126639Z",
+  "pub_date": "2026-09-28T16:50:24.948073Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTVWVSUlJCMnZSUENTcWtNN2RSWlIzQ2NLNXdkZFZ3SVhpbnRRYU1NK0NYZnpTOWlucllMNWh5OStwTldBWG55a1FUZVlBSjNFME56WUxTSjh2YkZpdmRHbUp0K1V5NUFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwNTc3MjY0CWZpbGU6U29tYSBEZXNrdG9wXzAuMi4wX3g2NC1zZXR1cC5leGUJdmVyc2lvbjowLjIuMApkSnc1SUxSaWpuNkVVRjZEbWYyU3JVR0ZOaTh4TC9QMkh5N0hMWExaKzdjS0VWc1p1SEJYT1BrcHFwUEw5R2lrOXJxZUVJTDdXbXRsUm15bjY2UWRDQT09Cg==",
-      "url": "https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases/download/desktop-v0.2.0/Soma-Setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTVWVSUlJCMnZSUE8rTFlkN0t6bmV1MzBHSGdXdFUxL1h2YlhML1ZmNXRZTkpWdUEzdFlsMFNJdXE0c2VjMDk0cWl2d1h2TVBwZEMwbGhHOWR4Yy9kTEJWWm50UlhWMVFRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwNjE0MTMzCWZpbGU6U29tYSBEZXNrdG9wXzAuMi4xX3g2NC1zZXR1cC5leGUJdmVyc2lvbjowLjIuMQoxN0JOYnNQRWpCVFhOK1k2eTZNN3Y2anZVRks0UzUzMjhDYjcwUmd3NnlWNTVkUlRsbk1GZkp6Z2V6T0dpRzhuWndSMi9lQWJEK3FSdld3QkU3dytEQT09Cg==",
+      "url": "https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases/download/desktop-v0.2.1/Soma-Setup.exe"
     }
   }
 }

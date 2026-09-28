@@ -135,3 +135,5 @@ Release correction — 0.2.1 (2026-09-28)
 - Moved study-window creation into an asynchronous Tauri command to avoid blocking the Windows message loop.
 - The 0.2.0 release is marked prerelease; 0.2.1 supersedes it after a live secondary-window verification.
 - Desktop update check successfully read the published feed; external textbook navigation opened OpenStax 3.1 in the system browser.
+
+Desktop 0.2.1: packaged secondary-window test passed with the full chapter map visible. Installer, signature and checksum published; stable download and updater feed now select 0.2.1.
