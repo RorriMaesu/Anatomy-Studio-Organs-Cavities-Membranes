@@ -1,6 +1,16 @@
 # Chapter 1 Region Atlas integration plan
 
-Status: reviewed and planned; integration is not implemented.
+Status: website integration implemented, with shared Chapter 1 navigation and assessment. Desktop installer release remains separate.
+
+## Delivered
+- All 52 original worksheet targets, stable regional IDs and source credits.
+- Anterior/posterior study views, head close-ups, area filters, search, paged labels, memory/spelling cards and eight orientation recall cards.
+- Shared naming/location practice, area/view scope, exact-alias grading, separate spelling feedback, targeted answer review and balanced chapter/custom exams.
+- Existing Soma progress, backups, reset protection and draft resume; explicit optional import from the original same-origin atlas, preserving the original data and marking imported answers assisted.
+- Keyboard marker activation and desktop fit checks; source worksheet bundled locally.
+
+The detailed plan below records the design decisions. “Learn” currently uses orientation recall cards rather than a separate long-form lesson sequence. Both-view display was omitted to prioritize legibility; anterior/posterior switching remains one control. Spelling feedback is shown on submitted answers and review, without a separate spelling mastery score.
+
 
 ## Sources reviewed
 - Live atlas: https://rorrimaesu.github.io/Anatomy-Physiology-Notes/Anatomy-Atlas/
