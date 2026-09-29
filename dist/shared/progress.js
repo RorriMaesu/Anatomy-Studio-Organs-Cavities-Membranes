@@ -1,7 +1,7 @@
 // A revision prevents an older open study tab from restoring cleared records.
 export const revisionKey='soma-progress-revision-v1';
 export function resetProgress(storage){
- const keys=['soma-inside-v1','soma-cell-studio-v1','soma-resume-v1','soma-atlas-draft-v1','soma-cell-draft-v1'];
+ const keys=['soma-inside-v1','soma-cell-studio-v1','soma-resume-v1','soma-atlas-draft-v1','soma-cell-draft-v1','soma-tissue-studio-v1','soma-tissue-draft-v1'];
  const previous=keys.map(k=>[k,storage.getItem(k)]);
  try{
   for(const k of keys)storage.removeItem(k);
