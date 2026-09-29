@@ -1,4 +1,4 @@
-import {regionSection} from './region-data.js';
+import {regionSection} from './region-data.js?v=labels-1';
 import {modules as cellModules} from './chapter3/content.js';
 import {systems} from './system-data.js';
 import {illustrations} from './system-geometry.js';

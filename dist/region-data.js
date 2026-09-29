@@ -1,4 +1,4 @@
-// Adapted from Anatomy Atlas; attribution and source revision are included with each figure.
+// Original atlas label wording is authoritative; regional adjectives remain accepted aliases.
 export const regionSection={
   "id": "body-regions",
   "title": "Body regions",
@@ -48,7 +48,7 @@ export const regionSection={
           "id": "anterior-forehead",
           "concept": "forehead",
           "number": 1,
-          "name": "Frontal",
+          "name": "Frons",
           "common": "Forehead",
           "aliases": [
             "frons",
@@ -68,7 +68,7 @@ export const regionSection={
           "id": "anterior-skull",
           "concept": "skull",
           "number": 2,
-          "name": "Cranial",
+          "name": "Cranium",
           "common": "Skull",
           "aliases": [
             "cranium",
@@ -88,7 +88,7 @@ export const regionSection={
           "id": "anterior-face",
           "concept": "face",
           "number": 3,
-          "name": "Facial",
+          "name": "Facies",
           "common": "Face",
           "aliases": [
             "facies",
@@ -108,7 +108,7 @@ export const regionSection={
           "id": "anterior-mouth",
           "concept": "mouth",
           "number": 4,
-          "name": "Oral",
+          "name": "Oris",
           "common": "Mouth",
           "aliases": [
             "oris",
@@ -128,7 +128,7 @@ export const regionSection={
           "id": "anterior-chin",
           "concept": "chin",
           "number": 5,
-          "name": "Mental",
+          "name": "Mentis",
           "common": "Chin",
           "aliases": [
             "mentis",
@@ -148,7 +148,7 @@ export const regionSection={
           "id": "anterior-armpit",
           "concept": "armpit",
           "number": 6,
-          "name": "Axillary",
+          "name": "Axilla",
           "common": "Armpit",
           "aliases": [
             "axilla",
@@ -168,7 +168,7 @@ export const regionSection={
           "id": "anterior-upper-arm",
           "concept": "upper-arm",
           "number": 7,
-          "name": "Brachial",
+          "name": "Brachium",
           "common": "Upper arm",
           "aliases": [
             "brachium",
@@ -189,7 +189,7 @@ export const regionSection={
           "id": "anterior-front-of-elbow",
           "concept": "front-of-elbow",
           "number": 8,
-          "name": "Antecubital",
+          "name": "Antecubitis",
           "common": "Front of elbow",
           "aliases": [
             "antecubitis",
@@ -210,7 +210,7 @@ export const regionSection={
           "id": "anterior-forearm",
           "concept": "forearm",
           "number": 9,
-          "name": "Antebrachial",
+          "name": "Antebrachium",
           "common": "Forearm",
           "aliases": [
             "antebrachium",
@@ -230,7 +230,7 @@ export const regionSection={
           "id": "anterior-wrist",
           "concept": "wrist",
           "number": 10,
-          "name": "Carpal",
+          "name": "Carpus",
           "common": "Wrist",
           "aliases": [
             "carpus",
@@ -269,7 +269,7 @@ export const regionSection={
           "id": "anterior-palm",
           "concept": "palm",
           "number": 12,
-          "name": "Palmar",
+          "name": "Palma",
           "common": "Palm",
           "aliases": [
             "palma",
@@ -289,7 +289,7 @@ export const regionSection={
           "id": "anterior-fingers",
           "concept": "fingers",
           "number": 13,
-          "name": "Digital (fingers)",
+          "name": "Digits",
           "common": "Fingers",
           "aliases": [
             "digits",
@@ -311,7 +311,7 @@ export const regionSection={
           "id": "anterior-kneecap",
           "concept": "kneecap",
           "number": 14,
-          "name": "Patellar",
+          "name": "Patella",
           "common": "Kneecap",
           "aliases": [
             "patella",
@@ -332,7 +332,7 @@ export const regionSection={
           "id": "anterior-leg",
           "concept": "leg",
           "number": 15,
-          "name": "Crural",
+          "name": "Crus",
           "common": "Leg",
           "aliases": [
             "crus",
@@ -354,7 +354,7 @@ export const regionSection={
           "id": "anterior-ankle",
           "concept": "ankle",
           "number": 16,
-          "name": "Tarsal",
+          "name": "Tarsus",
           "common": "Ankle",
           "aliases": [
             "tarsus",
@@ -374,7 +374,7 @@ export const regionSection={
           "id": "anterior-toes",
           "concept": "toes",
           "number": 17,
-          "name": "Digital (toes)",
+          "name": "Digits",
           "common": "Toes",
           "aliases": [
             "digits",
@@ -416,7 +416,7 @@ export const regionSection={
           "id": "anterior-eye",
           "concept": "eye",
           "number": 19,
-          "name": "Orbital",
+          "name": "Oculus",
           "common": "Eye",
           "aliases": [
             "oculus",
@@ -437,7 +437,7 @@ export const regionSection={
           "id": "anterior-cheek",
           "concept": "cheek",
           "number": 20,
-          "name": "Buccal",
+          "name": "Bucca",
           "common": "Cheek",
           "aliases": [
             "bucca",
@@ -457,7 +457,7 @@ export const regionSection={
           "id": "anterior-ear",
           "concept": "ear",
           "number": 21,
-          "name": "Otic",
+          "name": "Auris",
           "common": "Ear",
           "aliases": [
             "auris",
@@ -477,7 +477,7 @@ export const regionSection={
           "id": "anterior-nose",
           "concept": "nose",
           "number": 22,
-          "name": "Nasal",
+          "name": "Nasus",
           "common": "Nose",
           "aliases": [
             "nasus",
@@ -497,7 +497,7 @@ export const regionSection={
           "id": "anterior-neck",
           "concept": "neck",
           "number": 23,
-          "name": "Cervical",
+          "name": "Cervicis",
           "common": "Neck",
           "aliases": [
             "cervicis",
@@ -517,7 +517,7 @@ export const regionSection={
           "id": "anterior-chest",
           "concept": "chest",
           "number": 24,
-          "name": "Thoracic",
+          "name": "Thorax",
           "common": "Chest",
           "aliases": [
             "thorax",
@@ -538,7 +538,7 @@ export const regionSection={
           "id": "anterior-breast",
           "concept": "breast",
           "number": 25,
-          "name": "Mammary",
+          "name": "Mamma",
           "common": "Breast",
           "aliases": [
             "mamma",
@@ -558,7 +558,7 @@ export const regionSection={
           "id": "anterior-abdomen",
           "concept": "abdomen",
           "number": 26,
-          "name": "Abdominal",
+          "name": "Abdomen",
           "common": "Abdomen",
           "aliases": [
             "abdomen",
@@ -577,7 +577,7 @@ export const regionSection={
           "id": "anterior-navel",
           "concept": "navel",
           "number": 27,
-          "name": "Umbilical",
+          "name": "Umbilicus",
           "common": "Navel",
           "aliases": [
             "umbilicus",
@@ -599,7 +599,7 @@ export const regionSection={
           "id": "anterior-hip",
           "concept": "hip",
           "number": 28,
-          "name": "Coxal",
+          "name": "Hip",
           "common": "Hip",
           "aliases": [
             "hip",
@@ -619,7 +619,7 @@ export const regionSection={
           "id": "anterior-pelvis",
           "concept": "pelvis",
           "number": 29,
-          "name": "Pelvic",
+          "name": "Pelvis",
           "common": "Pelvis",
           "aliases": [
             "pelvis",
@@ -638,7 +638,7 @@ export const regionSection={
           "id": "anterior-groin",
           "concept": "groin",
           "number": 30,
-          "name": "Inguinal",
+          "name": "Inguen",
           "common": "Groin",
           "aliases": [
             "inguen",
@@ -658,7 +658,7 @@ export const regionSection={
           "id": "anterior-pubic-region",
           "concept": "pubic-region",
           "number": 31,
-          "name": "Pubic",
+          "name": "Pubis",
           "common": "Pubic region",
           "aliases": [
             "pubis",
@@ -678,7 +678,7 @@ export const regionSection={
           "id": "anterior-thigh",
           "concept": "thigh",
           "number": 32,
-          "name": "Femoral",
+          "name": "Femur",
           "common": "Thigh",
           "aliases": [
             "femur",
@@ -698,7 +698,7 @@ export const regionSection={
           "id": "anterior-foot",
           "concept": "foot",
           "number": 33,
-          "name": "Pedal",
+          "name": "Pes",
           "common": "Foot",
           "aliases": [
             "pes",
@@ -799,7 +799,7 @@ export const regionSection={
           "id": "posterior-back",
           "concept": "back",
           "number": 36,
-          "name": "Dorsal",
+          "name": "Dorsum",
           "common": "Back",
           "aliases": [
             "dorsum",
@@ -819,7 +819,7 @@ export const regionSection={
           "id": "posterior-upper-arm",
           "concept": "upper-arm",
           "number": 37,
-          "name": "Brachial",
+          "name": "Brachium",
           "common": "Upper arm",
           "aliases": [
             "brachium",
@@ -840,7 +840,7 @@ export const regionSection={
           "id": "posterior-back-of-elbow",
           "concept": "back-of-elbow",
           "number": 38,
-          "name": "Olecranal",
+          "name": "Olecranon",
           "common": "Back of elbow",
           "aliases": [
             "olecranon",
@@ -861,7 +861,7 @@ export const regionSection={
           "id": "posterior-lower-back",
           "concept": "lower-back",
           "number": 39,
-          "name": "Lumbar",
+          "name": "Lumbus",
           "common": "Lower back",
           "aliases": [
             "lumbus",
@@ -882,7 +882,7 @@ export const regionSection={
           "id": "posterior-sacral-region",
           "concept": "sacral-region",
           "number": 40,
-          "name": "Sacral",
+          "name": "Sacrum",
           "common": "Sacral region",
           "aliases": [
             "sacrum",
@@ -902,7 +902,7 @@ export const regionSection={
           "id": "posterior-forearm",
           "concept": "forearm",
           "number": 41,
-          "name": "Antebrachial",
+          "name": "Antebrachium",
           "common": "Forearm",
           "aliases": [
             "antebrachium",
@@ -922,7 +922,7 @@ export const regionSection={
           "id": "posterior-hand",
           "concept": "hand",
           "number": 42,
-          "name": "Manual",
+          "name": "Manus",
           "common": "Hand",
           "aliases": [
             "manus",
@@ -942,7 +942,7 @@ export const regionSection={
           "id": "posterior-buttock",
           "concept": "buttock",
           "number": 43,
-          "name": "Gluteal",
+          "name": "Gluteus",
           "common": "Buttock",
           "aliases": [
             "gluteus",
@@ -963,7 +963,7 @@ export const regionSection={
           "id": "posterior-thigh",
           "concept": "thigh",
           "number": 44,
-          "name": "Femoral",
+          "name": "Femur",
           "common": "Thigh",
           "aliases": [
             "femur",
@@ -983,7 +983,7 @@ export const regionSection={
           "id": "posterior-back-of-knee",
           "concept": "back-of-knee",
           "number": 45,
-          "name": "Popliteal",
+          "name": "Popliteus",
           "common": "Back of knee",
           "aliases": [
             "popliteus",
@@ -1005,7 +1005,7 @@ export const regionSection={
           "id": "posterior-calf",
           "concept": "calf",
           "number": 46,
-          "name": "Sural",
+          "name": "Sura",
           "common": "Calf",
           "aliases": [
             "sura",
@@ -1025,7 +1025,7 @@ export const regionSection={
           "id": "posterior-heel",
           "concept": "heel",
           "number": 47,
-          "name": "Calcaneal",
+          "name": "Calcaneus",
           "common": "Heel",
           "aliases": [
             "calcaneus",
@@ -1046,7 +1046,7 @@ export const regionSection={
           "id": "posterior-sole-of-foot",
           "concept": "sole-of-foot",
           "number": 48,
-          "name": "Plantar",
+          "name": "Planta",
           "common": "Sole of foot",
           "aliases": [
             "planta",
@@ -1068,7 +1068,7 @@ export const regionSection={
           "id": "posterior-head",
           "concept": "head",
           "number": 49,
-          "name": "Cephalic",
+          "name": "Cephalon",
           "common": "Head",
           "aliases": [
             "cephalon",
@@ -1088,7 +1088,7 @@ export const regionSection={
           "id": "posterior-neck",
           "concept": "neck",
           "number": 50,
-          "name": "Cervical",
+          "name": "Cervicis",
           "common": "Neck",
           "aliases": [
             "cervicis",
