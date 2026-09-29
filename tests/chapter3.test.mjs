@@ -75,3 +75,6 @@ test('Each module provides a comparison with reasoning hidden until requested',(
 });
 
 test('section activities group all existing learning tools without removing them',()=>{const run=harness();run("state.page='module';state.module='membrane'");let html=run('moduleView()');for(const label of ['Learn','Explore','Practice','Review','Read textbook'])assert(html.includes(label));run("state.tab='lab'");html=run('moduleView()');assert(html.includes('lab-container'));assert(html.includes('Textbook figures'));run("state.tab='review'");assert(run('moduleView()').includes('No missed or assisted'));});
+
+test('all six sections expose goals, ungraded retrieval and a final practice step',()=>{const run=harness();for(const m of modules){run(`state.module='${m.id}';state.lesson=${m.lessons.length-1}`);const html=run('learnView()');assert(html.includes('What to master in '+m.section));assert(html.includes('Pause &amp; explain')||html.includes('Pause & explain'));assert(html.includes('Practice this section'));}});
+test('practice hint does not display the full explanation before submission',()=>{const run=harness();run("state.session={exam:false,questions:[bank[0]],index:0,records:[],answered:false,hint:true,draft:''}");const html=run('quiz()');assert(html.includes('Identify what changes'));assert(!html.includes(run('esc(bank[0].explanation)')));});
