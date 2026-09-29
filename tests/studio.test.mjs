@@ -17,7 +17,7 @@ test('Blender export has four anatomically oriented planes and a lightweight hum
  assert(coords('Transverse').every(p=>Math.abs(p[1]-.94)<.0001));
  assert(new Set(coords('Oblique').map(p=>p[1])).size>1);
 });
-const code=fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8').replace(/import \{chapters,textbook\} from '[^']+';/,'').replace(/import \{sections,sources\} from '\.\/data\.js(?:\?[^']*)?';/,'');
+const code=fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8').replace(/import \{progressGuard,revisionKey\} from '[^']+';/,'').replace(/import \{chapters,textbook\} from '[^']+';/,'').replace(/import \{sections,sources\} from '\.\/data\.js(?:\?[^']*)?';/,'');
 function harness(){const nodes=new Map();let saved='{}';const document={querySelector(id){if(!nodes.has(id))nodes.set(id,{value:'',checked:false,innerHTML:'',addEventListener(){},focus(){}});return nodes.get(id);},querySelectorAll(){return []}};const c=vm.createContext({sections,sources,chapters,textbook,document,localStorage:{getItem:()=>saved,setItem:(_,v)=>saved=v},setTimeout:fn=>fn(),confirm:()=>true,console});vm.runInContext(code,c);return {run:s=>vm.runInContext(s,c),node:id=>document.querySelector(id)};}
 test('3D quiz conceals names and selection; study labels and textbook fallback remain available',()=>{
  const h=harness();h.run("state.section='planes'");
