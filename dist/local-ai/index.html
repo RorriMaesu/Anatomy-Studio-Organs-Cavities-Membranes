@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#101a26" />
     <title>Soma · Local learning companion</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=browser-1" />
   <link rel="stylesheet" href="../shared/luxe.css?v=2">
   </head>
   <body>
@@ -28,30 +28,7 @@
           from your answers. Your conversations stay on this computer.
         </p>
       </div>
-      <div id="web-note" hidden class="notice">
-        <b>Local AI runs in Soma Desktop for Windows.</b>
-        <p>
-          Ask questions, practice explaining, and get feedback on your answers.
-          Install Soma once, then follow the setup guide. Your AI conversations
-          run on your computer. No AI subscription is needed.
-        </p>
-        <a
-          class="button primary"
-          id="desktop-download"
-          href="https://github.com/RorriMaesu/Anatomy-Studio-Organs-Cavities-Membranes/releases/latest/download/Soma-Setup.exe"
-          >Download Soma for Windows</a
-        >
-        <a class="button" href="install/">Installation help · browser screenshots →</a>
-        <a href="../chapter3/">Keep studying in your browser →</a>
-        <p>
-          <small
-            >Windows 10 22H2 / Windows 11 · Intel or AMD 64-bit · Preview
-            release. Version 0.2.1 · The app is about 20 MB. First-time AI setup needs
-            additional downloads of several GB. The current installer is not
-            code-signed.</small
-          >
-        </p>
-      </div>
+      <div id="web-note" hidden></div>
       <nav class="tabs" aria-label="Companion tools">
         <button data-tab="home">Study home</button
         ><button data-tab="tutor">Ask your tutor</button
@@ -66,6 +43,6 @@
       Chapter 3 references: OpenStax A&P 2e · Educational adaptations CC
       BY-NC-SA 4.0 · AI feedback can need correction.
     </footer>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="bootstrap.js?v=browser-1"></script>
   </body>
 </html>

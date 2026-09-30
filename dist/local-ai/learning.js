@@ -455,3 +455,5 @@ export async function learningChange(ev) {
     }
   }
 }
+
+export const getLearningTopic=()=>topic;
