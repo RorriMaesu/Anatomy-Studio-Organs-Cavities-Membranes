@@ -83,7 +83,9 @@ const q = {
   sourceIds: [refs[0].id],
 };
 test("retrieval stays within the selected chapter module and ranks relevant lessons", () => {
-  assert.equal(corpus.length, 53);
+  assert.equal(corpus.filter(r=>r.chapter===3).length, 53);
+  for(const chapter of [1,2,3,4])assert.ok(corpus.some(r=>r.chapter===chapter));
+  assert.ok(corpus.every(r=>r.text&&!r.text.includes("undefined")));
   assert.ok(refs.every((r) => r.module === "membrane"));
   assert.match(refs[0].text, /osmosis|hypertonic/i);
 });
