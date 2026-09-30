@@ -709,3 +709,14 @@ body:has(#web-note:not([hidden])) .intro {
 }
 
 .config-example{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:18px;background:#101a26;border:1px solid var(--line);border-radius:12px;margin:16px 0}.config-example span{font-size:12px;color:var(--muted)}.config-example code,.config-command{overflow-wrap:anywhere;white-space:normal}.config-command{display:block;background:#101a26;border-radius:10px;padding:16px}.setup-instructions{padding-left:22px;line-height:1.7}.setup-instructions li{margin:8px 0}.guide-pager{justify-content:space-between;margin-top:20px}.model-success{color:var(--mint)}.guide-step{margin-top:22px}.task-banner{overflow-wrap:anywhere}.wizard select{max-width:100%}@media(max-width:600px){.config-example{grid-template-columns:1fr}.config-example code{margin-bottom:10px}}
+@media(min-width:900px){
+ body[data-browser="true"][data-tool="tutor"] #panel>.grid>article.card{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+ body[data-browser="true"][data-tool="tutor"] .chatlog{flex:1;min-height:90px;height:auto;margin-bottom:8px}
+ body[data-browser="true"][data-tool="tutor"] textarea{min-height:65px;height:75px;flex-shrink:0}
+ body[data-browser="true"][data-tool="tutor"] article.card>h2{margin:4px 0 12px}
+ body[data-browser="true"][data-tool="tutor"] article.card>.eyebrow{margin:4px 0}
+ body[data-browser="true"][data-tool="tutor"] aside.card{font-size:13px}
+ body[data-browser="true"][data-tool="tutor"] aside.card label{margin-top:8px}
+ body[data-browser="true"][data-tool="tutor"] aside.card .textbook-card{padding:12px;margin-top:12px}
+ body[data-browser="true"][data-tool="tutor"] aside.card .muted{margin:8px 0}
+}
