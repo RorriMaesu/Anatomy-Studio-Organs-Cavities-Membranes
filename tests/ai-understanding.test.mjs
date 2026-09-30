@@ -18,3 +18,7 @@ test('general tutor answers need no fabricated citation while quiz citations rem
  assert.match(tutorMessages('A question outside this chapter',[],refs,'socratic')[0].content,/Students may ask any question/);
  assert.match(quizMessages(refs,3,'short','foundational')[0].content,/Work only from/);
 });
+test('ambiguous assessment language overrides an inconsistent certainty flag',()=>{
+ const grade=validateGrade({needsReview:false,criteria:[{index:0,earned:false,evidence:'',reason:'The answer is ambiguous and could be interpreted as solute movement.'},{index:1,earned:false,evidence:'',reason:'No volume direction stated.'}],feedback:'Clarify your meaning.',followUp:'What moves, and in which direction?',sourceIds:[refs[0].id]},q,'It moves and changes.',refs);
+ assert.equal(grade.needsReview,true);assert.match(grade.reviewReason,/ambiguous/);
+});
