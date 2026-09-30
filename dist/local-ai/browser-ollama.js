@@ -50,6 +50,6 @@ export function createBrowserOllama({fetchImpl=globalThis.fetch,onProgress=()=>{
     if(!complete)throw new OllamaError('The download ended before Ollama confirmed completion. Check again; retrying can reuse downloaded data.','download');return {success:true};
    }
    throw new OllamaError('This action is managed in the Ollama application, not the browser.','unsupported');
-  }catch(err){if(controller.signal.aborted)throw new OllamaError(timedOut?'This step timed out. Ollama may still be loading or working. Check again, or try a smaller model.':'Stopped waiting for this request. Ollama may still be finishing work in the background.',timedOut?'timeout':'cancelled');throw err;}finally{clearTimeout(timer);active=null;}
+  }catch(err){if(controller.signal.aborted)throw new OllamaError(timedOut?(['status','models'].includes(command)?'The connection check timed out. Check that Ollama is running, this website is allowed in OLLAMA_ORIGINS, and your browser permits local connections.':'This step timed out. Ollama may still be loading or working. Check again, or try a smaller model.'):'Stopped waiting for this request. Ollama may still be finishing work in the background.',timedOut?'timeout':'cancelled');throw err;}finally{clearTimeout(timer);active=null;}
  }};
 }
