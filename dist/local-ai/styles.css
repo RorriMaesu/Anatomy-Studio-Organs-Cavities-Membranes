@@ -720,3 +720,4 @@ body:has(#web-note:not([hidden])) .intro {
  body[data-browser="true"][data-tool="tutor"] aside.card .textbook-card{padding:12px;margin-top:12px}
  body[data-browser="true"][data-tool="tutor"] aside.card .muted{margin:8px 0}
 }
+.answer-basis{display:block;margin-top:12px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}

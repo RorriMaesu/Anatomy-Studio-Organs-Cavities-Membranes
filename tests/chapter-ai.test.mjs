@@ -10,5 +10,5 @@ test('every published section has scoped AI references and the exact textbook de
 test('legacy Chapter 3 reference identifiers survive the chapter expansion',()=>{
  assert.equal(corpus.filter(r=>r.id.startsWith('C3-')).length,53);
  assert.equal(corpus.find(r=>r.id==='C3-3.1-L1').module,'membrane');
- const refs=retrieve('tissues','c4-4-1');assert.ok(tutorMessages('Explain',[],refs,'socratic')[0].content.includes('selected textbook section'));
+ const refs=retrieve('tissues','c4-4-1');assert.ok(tutorMessages('Explain',[],refs,'socratic')[0].content.includes('provided studio references'));
 });
