@@ -21,14 +21,16 @@ export function lab(module,{mode=labOptions[module][0][0],labels=true,step=0,lay
    if(mode==='families'&&i===0)for(let a=0;a<5;a++)body+=cell(x+30+a*42,y+20,38,52,colors[i]);
    else if(mode==='families'&&i===1)for(let a=0;a<5;a++)body+=`<path d="M${x+20} ${y+20+a*12}q100 40 225 0" fill="none" stroke="${colors[i]}" stroke-width="3"/>`;
    else if(mode==='families'&&i===2)for(let a=0;a<3;a++)body+=`<rect x="${x+28}" y="${y+18+a*20}" width="210" height="15" rx="7" fill="url(#stripes)" stroke="${colors[i]}"/>`;
-   else body+=`<circle cx="${x+135}" cy="${y+43}" r="25" fill="${colors[i]}" fill-opacity=".3" stroke="${colors[i]}"/>`;
+   else if(mode==='families')body+=`<path d="M${x+100} ${y+45}l-35 -25m35 25l-45 30m45 -30h100m-15 0l25 -25m-25 25l25 25" fill="none" stroke="${colors[i]}" stroke-width="4"/><circle cx="${x+100}" cy="${y+45}" r="20" fill="${colors[i]}" fill-opacity=".3" stroke="${colors[i]}"/>`;
+   else if(mode==='membranes'){for(let a=0;a<6;a++)body+=cell(x+35+a*33,y+18,30,i===3?12:25,colors[i]);body+=`<path d="M${x+35} ${y+49}h195" stroke="${colors[i]}" stroke-width="3"/><path d="M${x+35} ${y+59}q80 25 195 0" fill="none" stroke="${colors[i]}" stroke-width="2"/>`;}
+   else{for(let a=0;a<3;a++)body+=`<ellipse cx="${x+135}" cy="${y+26+a*20}" rx="90" ry="12" fill="${a===i?colors[i]:'#394158'}" stroke="${a===i?colors[i]:'#536079'}"/>`;}
    body+=label(x+135,y+104,n)+label(x+135,y+130,details[i])+'</g>';
   });
   title=mode==='families'?'Four tissues, one functioning organ':mode==='membranes'?'Match each membrane to its setting':'Developmental origins';caption=mode==='membranes'?'Cutaneous, mucous and serous membranes combine epithelium with connective tissue. Synovial membranes are connective tissue membranes.':mode==='origins'?'These are representative origins. Epithelium can arise from all three germ layers; the map is not a one-to-one assignment.':'Look for architecture: a packed sheet, matrix between cells, elongated contractile cells, or branching communication cells.';
  }
  if(module==='epithelial'){
   if(mode==='classifier'||mode==='transitional'){
-   const transitional=mode==='transitional',n=transitional?(stretch?2:4):Number(layers),h=transitional?(stretch?24:43):shape==='squamous'?25:shape==='columnar'?110:65,w=transitional?(stretch?90:65):shape==='squamous'?110:shape==='columnar'?43:65;
+   const transitional=mode==='transitional',n=transitional?(stretch?2:4):Number(layers),h=transitional?(stretch?24:43):shape==='squamous'?25:shape==='columnar'?(n===1?110:70):65,w=transitional?(stretch?90:65):shape==='squamous'?110:shape==='columnar'?43:65;
    for(let r=0;r<n;r++)for(let x=80;x+w<635;x+=w+3)body+=cell(x,320-(r+1)*(h+3),w,h);
    body+='<path d="M65 325H635" stroke="#6ce6d4" stroke-width="6"/>'+label(350,363,'Basement membrane')+label(350,65,'Apical / free surface');
    title=transitional?'Transitional epithelium':`${n===1?'Simple':'Stratified'} ${shape} epithelium`;

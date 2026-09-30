@@ -1,12 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import vm from 'node:vm';
+import {specimens} from '../dist/chapter4/specimens.js';
 import {modules,facts} from '../dist/chapter4/content.js';
 import {figures} from '../dist/chapter4/figures.js';
 import {lab,labOptions} from '../dist/chapter4/labs.js';
-import {bank,blueprint,makeSession,result,correct,validSession} from '../dist/chapter4/engine.js';
-import {chapters,sectionLink} from '../dist/shared/course.js';
-import {resetProgress} from '../dist/shared/progress.js';
+import {bank,blueprint,makeSession,result,correct,validSession,sectionCounts} from '../dist/chapter4/engine.js';
+import {chapters,sectionLink,textbook,e} from '../dist/shared/course.js';
+import {resetProgress,progressGuard,revisionKey} from '../dist/shared/progress.js';
 test('Chapter 4 objectives have stable identities, lessons, valid answers and remediation',()=>{
  assert.equal(modules.length,6);assert(bank.length>=120);assert.equal(new Set(bank.map(q=>q.id)).size,bank.length);
  for(const m of modules){assert(m.lessons.length>=2);for(const l of m.lessons){assert(l.body.length>150);assert(bank.some(q=>q.module===m.id&&q.lesson===l.id));}}
@@ -35,4 +37,26 @@ test('Every lab mode renders; assessment versions omit text labels and captions'
 test('Chapter routing and global reset include Tissue Studio without clearing settings',()=>{
  const c=chapters.find(c=>c.id===4);for(const s of c.sections)assert.equal(sectionLink(c,s),`chapter4/#module/${s[2]}/learn`);
  const values=new Map([['soma-tissue-studio-v1','scores'],['soma-tissue-draft-v1','draft'],['soma-motion','off']]);resetProgress({getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v),removeItem:k=>values.delete(k)});assert(!values.has('soma-tissue-studio-v1'));assert(!values.has('soma-tissue-draft-v1'));assert.equal(values.get('soma-motion'),'off');
+});
+function harness(storageFails=false){
+ const nodes=new Map(),values=new Map(),node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',querySelector:node,querySelectorAll:()=>[],addEventListener(){},focus(){}});return nodes.get(id);};
+ const storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>{if(storageFails)throw Error('denied');values.set(k,v);},removeItem:k=>values.delete(k)};
+ const context=vm.createContext({modules,facts,figures,specimens,lab,labOptions,bank,makeSession,correct,result,validSession,sectionCounts,chapters,textbook,e,progressGuard,revisionKey,read:(k,f={})=>JSON.parse(storage.getItem(k)||'null')||f,document:{querySelector:node,activeElement:null},localStorage:storage,location:{hash:'#module/types/learn',replace(){}},window:{addEventListener(){}},CSS:{escape:s=>s},confirm:()=>true,alert(){}});
+ context.document.documentElement={dataset:{}};
+ vm.runInContext(fs.readFileSync(new URL('../dist/chapter4/studio.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,''),context);
+ return {run:s=>vm.runInContext(s,context),html:()=>node('#app').innerHTML,values};
+}
+test('Exam hides explanations and source identities until submission; recorded answers cannot inflate progress',()=>{
+ const h=harness();h.run("state.session=makeSession({exam:true});state.session.index=state.session.ids.findIndex(id=>bank.find(q=>q.id===id).specimen);state.tab='session';render()");
+ assert(h.html().includes('Unlabeled textbook tissue specimen'));assert(!h.html().includes('class="feedback"'));assert(!h.html().includes('Use a hint'));assert(!h.html().includes('Regents'));
+ h.run("var q=bank.find(q=>q.id===state.session.ids[state.session.index]);state.session.answers[q.id]=q.answer;record(q.id);record(q.id)");assert.equal(h.run('state.stats[q.id].attempts'),1);
+});
+test('Practice help remains assisted after saving, and storage denial is visible immediately',()=>{
+ const h=harness();h.run("state.session=makeSession({module:'types'});var q=bank.find(q=>q.id===state.session.ids[0]);state.session.answers[q.id]=q.answer;state.session.assisted[q.id]=true;record(q.id);state.tab='session';render()");
+ assert(h.html().includes('Correct · assisted'));assert.equal(JSON.parse(h.values.get('soma-tissue-draft-v1')).session.assisted[h.run('q.id')],true);
+ assert(harness(true).html().includes('Browser storage is unavailable'));
+});
+test('Micrograph questions have neutral image filenames and valid attribution after review',()=>{
+ for(const s of specimens){assert(fs.existsSync(new URL('../dist/chapter4/'+s.src,import.meta.url)));assert(!s.src.toLowerCase().includes(s.name.toLowerCase()));assert(s.credit.includes('Regents'));assert(s.evidence.length>50);}
+ for(let i=0;i<20;i++){const exam=makeSession({exam:true}),qs=exam.ids.map(id=>bank.find(q=>q.id===id));assert(qs.some(q=>q.specimen&&q.module==='muscle'));assert(qs.some(q=>q.specimen&&q.module==='connective'));const images=qs.filter(q=>q.specimen).map(q=>q.specimen);assert.equal(images.length,new Set(images).size);}
 });

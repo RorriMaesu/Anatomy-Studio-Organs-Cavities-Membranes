@@ -1,6 +1,6 @@
 # Chapter 4 — Tissue Studio
 
-Status: planning only. No Chapter 4 page or navigation entry has been published.
+Status: first release implemented. Tissue Studio is integrated into the chapter library and shared progress controls. See chapter4-release.md for delivered coverage and current limits.
 Reviewed 2026-09-29 against the supplied Anatomy and Physiology 2e PDF: PDF pages 145–182 (printed pages 129–166), covering the chapter introduction, sections 4.1–4.6, key terms, summary and review questions. Official section pages were also checked.
 
 ## Product concept and student path

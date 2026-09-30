@@ -1,4 +1,5 @@
 import {modules,facts} from './content.js';
+import {specimens} from './specimens.js';
 import {shuffled,normalize} from '../chapter3/engine.js';
 export const blueprint={types:6,epithelial:10,connective:10,muscle:5,nervous:4,repair:5};
 const scenario=(id,module,lesson,prompt,answer,others,explanation,visual)=>({id:`${module}/case/${id}`,module,lesson,prompt,answer,options:[answer,...others],explanation,type:'reasoning',visual});
@@ -39,10 +40,13 @@ export const bank=[...facts.map(f=>{
  const start=peers.findIndex(x=>x.lesson===f.lesson);
  const distractors=[...peers.slice(Math.max(0,start)),...peers.slice(0,Math.max(0,start))].slice(0,3).map(x=>x.term);
  return {id:`${f.module}/term/${f.id}`,module:f.module,lesson:f.lesson,type:'recall',prompt:`Which term matches this description? ${f.definition}`,answer:f.term,options:[f.term,...distractors],explanation:f.definition};
-}),...cases];
+}),...cases,...specimens.flatMap(s=>[
+ {id:`${s.module}/specimen/${s.id}/name`,module:s.module,lesson:s.lesson,type:'specimen',specimen:s.id,prompt:'Identify the tissue in this textbook micrograph.',answer:s.name,options:s.module==='muscle'?['Skeletal muscle','Smooth muscle','Cardiac muscle','Dense regular connective tissue']:['Adipose tissue','Reticular tissue','Hyaline cartilage','Simple cuboidal epithelium'],explanation:s.evidence+' '+s.contrast},
+ {id:`${s.module}/specimen/${s.id}/evidence`,module:s.module,lesson:s.lesson,type:'evidence',specimen:s.id,prompt:'Which visible evidence best supports the identification of this tissue?',answer:s.evidence,options:[s.evidence,...specimens.filter(x=>x.id!==s.id).slice(0,3).map(x=>x.evidence)],explanation:s.name+': '+s.evidence+' '+s.contrast}
+])];
 export function makeSession({module,exam=false,stats={},revisit=false,random=Math.random}={}){
  let pool=bank.filter(q=>(!module||q.module===module)&&(!revisit||(stats[q.id]&&(!stats[q.id].lastCorrect||stats[q.id].assisted))));
- if(exam){pool=Object.entries(blueprint).flatMap(([id,n])=>{const group=pool.filter(q=>q.module===id),reasoning=shuffled(group.filter(q=>q.type==='reasoning'),random).slice(0,Math.min(3,n));return [...reasoning,...shuffled(group.filter(q=>!reasoning.includes(q)),random).slice(0,n-reasoning.length)];});}
+ if(exam){pool=Object.entries(blueprint).flatMap(([id,n])=>{const group=pool.filter(q=>q.module===id),visual=shuffled(group.filter(q=>q.type==='specimen'),random).slice(0,1),reasoning=shuffled(group.filter(q=>q.type==='reasoning'),random).slice(0,Math.min(3,n-visual.length)),chosen=[...visual,...reasoning],rest=group.filter(q=>!chosen.includes(q)&&(!q.specimen||!chosen.some(x=>x.specimen===q.specimen)));return [...chosen,...shuffled(rest,random).filter((q,i,a)=>!q.specimen||a.findIndex(x=>x.specimen===q.specimen)===i).slice(0,n-chosen.length)];});}
  else pool=shuffled(pool,random).slice(0,10);
  return {version:1,exam,ids:shuffled(pool,random).map(q=>q.id),options:Object.fromEntries(pool.map(q=>[q.id,shuffled(q.options,random)])),answers:{},assisted:{},index:0,submitted:false,recorded:{}};
 }

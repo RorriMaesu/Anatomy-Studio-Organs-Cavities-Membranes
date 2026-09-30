@@ -20,3 +20,10 @@ for i,(page,index,title,module) in enumerate(rows,1):
     manifest.append(dict(id=f'4.{i}',title=title,module=module,page=page,printedPage=page-16,src='assets/'+name,width=image.width,height=image.height,credit=credit,kind='Textbook figure with micrograph' if i in micro else 'Textbook illustration',role='Study reference; original lettering retained; not used as an unlabeled assessment specimen'))
 (ROOT/'dist/chapter4/figures.js').write_text('export const figures='+json.dumps(manifest,ensure_ascii=False,indent=2)+';\n',encoding='utf-8')
 print(f'Extracted {len(manifest)} figures.')
+# Reviewed image-only panel bounds in the extracted figure coordinate system.
+# Neutral filenames prevent tissue names leaking through assessment image URLs.
+from PIL import Image
+panels=[(18,(5,5,630,290)),(18,(5,375,630,655)),(18,(5,740,630,1020)),(13,(1060,20,1990,770)),(14,(1100,15,1980,725))]
+for i,(figure,bounds) in enumerate(panels,1):
+ Image.open(out/f'figure-4-{figure}.webp').crop(bounds).save(out/f'specimen-{i}.webp',quality=95)
+print(f'Extracted {len(panels)} reviewed micrograph panels.')
