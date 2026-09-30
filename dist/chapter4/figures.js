@@ -10,7 +10,7 @@ export const figures=[
     "height": 918,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Original image credit: “Haymanj”/Wikimedia Commons (as credited in the textbook).",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.2",
@@ -23,7 +23,7 @@ export const figures=[
     "height": 1540,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.3",
@@ -36,7 +36,7 @@ export const figures=[
     "height": 2263,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.4",
@@ -49,7 +49,7 @@ export const figures=[
     "height": 800,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.5",
@@ -62,7 +62,7 @@ export const figures=[
     "height": 2335,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.6",
@@ -75,7 +75,7 @@ export const figures=[
     "height": 970,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.7",
@@ -88,7 +88,7 @@ export const figures=[
     "height": 1941,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.8",
@@ -101,7 +101,7 @@ export const figures=[
     "height": 2400,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.9",
@@ -114,7 +114,7 @@ export const figures=[
     "height": 1210,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.10",
@@ -127,7 +127,7 @@ export const figures=[
     "height": 1683,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.11",
@@ -140,7 +140,7 @@ export const figures=[
     "height": 609,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.12",
@@ -153,7 +153,7 @@ export const figures=[
     "height": 375,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.13",
@@ -166,7 +166,7 @@ export const figures=[
     "height": 803,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.14",
@@ -179,7 +179,7 @@ export const figures=[
     "height": 746,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.15",
@@ -192,7 +192,7 @@ export const figures=[
     "height": 1372,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.16",
@@ -205,7 +205,7 @@ export const figures=[
     "height": 2280,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.17",
@@ -218,7 +218,7 @@ export const figures=[
     "height": 760,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.18",
@@ -231,7 +231,7 @@ export const figures=[
     "height": 1068,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.19",
@@ -244,7 +244,7 @@ export const figures=[
     "height": 579,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.20",
@@ -257,7 +257,7 @@ export const figures=[
     "height": 754,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. Micrograph(s) provided by the Regents of University of Michigan Medical School © 2012, as credited in the textbook.",
     "kind": "Textbook figure with micrograph",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.21",
@@ -270,7 +270,7 @@ export const figures=[
     "height": 549,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   },
   {
     "id": "4.22",
@@ -283,6 +283,6 @@ export const figures=[
     "height": 1218,
     "credit": "OpenStax Anatomy and Physiology 2e; educational reuse under CC BY-NC-SA 4.0. ",
     "kind": "Textbook illustration",
-    "role": "Study reference; original lettering retained; not used as an unlabeled assessment specimen"
+    "role": "Study reference; original lettering retained. Selected clipped details may also be used for textbook-based practice; not used as an unseen specimen exam."
   }
 ];

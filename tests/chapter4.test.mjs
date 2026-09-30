@@ -60,3 +60,16 @@ test('Micrograph questions have neutral image filenames and valid attribution af
  for(const s of specimens){assert(fs.existsSync(new URL('../dist/chapter4/'+s.src,import.meta.url)));assert(!s.src.toLowerCase().includes(s.name.toLowerCase()));assert(s.credit.includes('Regents'));assert(s.evidence.length>50);}
  for(let i=0;i<20;i++){const exam=makeSession({exam:true}),qs=exam.ids.map(id=>bank.find(q=>q.id===id));assert(qs.some(q=>q.specimen&&q.module==='muscle'));assert(qs.some(q=>q.specimen&&q.module==='connective'));const images=qs.filter(q=>q.specimen).map(q=>q.specimen);assert.equal(images.length,new Set(images).size);}
 });
+
+test('textbook tours preserve source geometry and provide contextual recall prompts',()=>{
+ for(const m of modules)for(const [mode] of labOptions[m.id]){
+  const first=lab(m.id,{mode});
+  for(let step=0;step<first.steps;step++){
+   const d=lab(m.id,{mode,step});assert(d.svg.includes('<image href="'+d.figure.src));assert(d.svg.includes('clip-path="url(#study-crop)"'));assert(d.question.endsWith('?'));assert(d.caption.length>50);
+   const bounds=d.svg.match(/viewBox="([^"]+)"/)[1].split(' ').map(Number);assert(bounds.every(Number.isFinite));assert(bounds[0]>=0&&bounds[1]>=0&&bounds[2]>0&&bounds[3]>0);assert(bounds[0]+bounds[2]<=d.figure.width+1);assert(bounds[1]+bounds[3]<=d.figure.height+1);
+  }
+ }
+ assert(!lab('muscle',{mode:'cardiac'}).svg.includes('contract'));
+ assert.match(lab('epithelial',{mode:'transitional'}).caption,/does not remove cells/);
+ assert(lab('nervous',{mode:'signal',step:2}).svg.includes('flow-trace'));
+});

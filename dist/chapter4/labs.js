@@ -26,7 +26,7 @@ export function lab(module,{mode=labOptions[module][0][0],labels=true,step=0,lay
  let tour=tours[mode],controls='';
  if(mode==='classifier'){
   const row=['squamous','cuboidal','columnar'].indexOf(shape),col=Number(layers)===1?0:1;
-  tour={figure:'4.6',steps:[S(`${col?'Stratified':'Simple'} ${shape}`,[col?.41:.116,row*.323,.294,.323],col?'Identify the apical cells to name stratified epithelium. Basal cells may have a different shape. The textbook preserves that distinction.':'Every cell in a simple epithelial layer contacts the basal lamina. Classify the cell shape separately from the layer count.','Which cells should determine the shape part of the name?')]};
+  tour={figure:'4.6',steps:[S(`${col?'Stratified':'Simple'} ${shape}`,[col?.41:.116,[.036,.355,.679][row],.294,[.319,.324,.321][row]],col?'Identify the apical cells to name stratified epithelium. Basal cells may have a different shape. The textbook preserves that distinction.':'Every cell in a simple epithelial layer contacts the basal lamina. Classify the cell shape separately from the layer count.','Which cells should determine the shape part of the name?')]};
   controls=`<label>Layers <select id="layers"><option value="1" ${!col?'selected':''}>One</option><option value="3" ${col?'selected':''}>Several</option></select></label><label>Surface shape <select id="shape">${['squamous','cuboidal','columnar'].map(s=>`<option ${shape===s?'selected':''}>${s}</option>`).join('')}</select></label>`;
  }
  if(mode==='transitional')tour={figure:'4.8',steps:[S('Transitional epithelium',[0,.86,1,.14],'The textbook summary shows specialized stratified epithelium. During filling, superficial umbrella cells flatten and the tissue becomes thinner. Distension does not remove cells or convert it into simple epithelium.','What changes with distension, and what stays the same?')]};
@@ -40,7 +40,7 @@ export function lab(module,{mode=labOptions[module][0][0],labels=true,step=0,lay
   const row=[.07,.405,.75][i],height=[.235,.23,.23][i];
   overlay+=`<g class="secretion-guide" aria-hidden="true">${[.205,.35,.495].map((x,n)=>`<rect class="process-focus" style="--phase:${n}" x="${f.width*x}" y="${f.height*row}" width="${f.width*.16}" height="${f.height*height}" rx="${stroke*5}" fill="none" stroke="#7650c9" stroke-width="${stroke*2}"/>`).join('')}</g>`;
  }
- const svg=`<svg class="textbook-study" viewBox="${view.join(' ')}" role="img" aria-label="${labels?escape(s.name+' — original textbook figure '+f.id):'Unlabeled textbook detail'}" xmlns="http://www.w3.org/2000/svg"><image href="${f.src}" x="0" y="0" width="${f.width}" height="${f.height}"/>${overlay}</svg>`;
+ const svg=`<svg class="textbook-study" viewBox="${view.join(' ')}" role="img" aria-label="${labels?escape(s.name+' — original textbook figure '+f.id):'Unlabeled textbook detail'}" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="study-crop"><rect x="${view[0]}" y="${view[1]}" width="${view[2]}" height="${view[3]}"/></clipPath></defs><g clip-path="url(#study-crop)"><image href="${f.src}" x="0" y="0" width="${f.width}" height="${f.height}"/>${overlay}</g></svg>`;
  controls+=tour.steps.length>1?`<div class="tour-steps">${tour.steps.map((x,n)=>`<button data-tour-step="${n}" aria-pressed="${n===i}">${n+1}. ${escape(x.name)}</button>`).join('')}</div>`:'';
  return {title:s.name,caption:s.description,question:s.question,controls,svg,figure:f,step:i,steps:tour.steps.length};
 }
