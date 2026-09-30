@@ -41,7 +41,7 @@ test('Chapter routing and global reset include Tissue Studio without clearing se
 function harness(storageFails=false){
  const nodes=new Map(),values=new Map(),node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',querySelector:node,querySelectorAll:()=>[],addEventListener(){},focus(){}});return nodes.get(id);};
  const storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>{if(storageFails)throw Error('denied');values.set(k,v);},removeItem:k=>values.delete(k)};
- const context=vm.createContext({modules,facts,figures,specimens,lab,labOptions,bank,makeSession,correct,result,validSession,sectionCounts,chapters,textbook,e,progressGuard,revisionKey,read:(k,f={})=>JSON.parse(storage.getItem(k)||'null')||f,document:{querySelector:node,activeElement:null},localStorage:storage,location:{hash:'#module/types/learn',replace(){}},window:{addEventListener(){}},CSS:{escape:s=>s},confirm:()=>true,alert(){}});
+ const context=vm.createContext({setTimeout,clearTimeout,modules,facts,figures,specimens,lab,labOptions,bank,makeSession,correct,result,validSession,sectionCounts,chapters,textbook,e,progressGuard,revisionKey,read:(k,f={})=>JSON.parse(storage.getItem(k)||'null')||f,document:{querySelector:node,activeElement:null},localStorage:storage,location:{hash:'#module/types/learn',replace(){}},window:{addEventListener(){}},CSS:{escape:s=>s},confirm:()=>true,alert(){}});
  context.document.documentElement={dataset:{}};
  vm.runInContext(fs.readFileSync(new URL('../dist/chapter4/studio.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,''),context);
  return {run:s=>vm.runInContext(s,context),html:()=>node('#app').innerHTML,values};
