@@ -110,3 +110,14 @@ No changes to the student's Ollama environment or browser permissions were made 
 - Ollama v0.35.0 application URL handling: https://github.com/ollama/ollama/blob/v0.35.0/app/cmd/app/app.go
 - Windows protocol registration in that release: https://github.com/ollama/ollama/blob/v0.35.0/app/ollama.iss
 - Model remote-host/capability fields: https://github.com/ollama/ollama/blob/v0.35.0/api/types.go
+
+
+## Implementation checkpoint — September 29, 2026
+
+Browser mode now uses the fixed loopback Ollama API directly; native clients retain their existing transport. No additional Soma installation is required. Connection starts only after a student clicks Connect. Local model metadata is checked before prompts are sent, structured replies are validated, downloads report progress, and cancellation stops waiting without promising server termination.
+
+All 23 published sections in Chapters 1–4 have separate retrieval scopes, matching textbook links, and tutor/quiz entry points. Chapter 3 reference IDs and saved-work format are retained. Chapter 1–2 coverage is explicitly focused essentials. Written-answer assessments are labeled provisional.
+
+Verification: automated transport, curriculum, validation, scoring, and existing studio tests; browser checks of chapter selection and unavailable-service guidance. Real inference from the deployed origin remains unverified: Ollama was not reachable and automatic approval review rejected starting a temporary test service with an origin setting. No persistent computer settings were changed.
+
+Browser limitations remain explicit: no reliable installation detection when disconnected, no silent process launch guarantee, no free-VRAM measurement, and no filesystem model-folder control. Students use the guided one-time origin setting and may need browser local-network permission. The Open Ollama link depends on the installed application's protocol registration.
